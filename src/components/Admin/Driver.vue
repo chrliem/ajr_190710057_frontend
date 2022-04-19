@@ -386,11 +386,11 @@ export default {
             });
             },
             cancel(){
-            this.resetForm();
-            this.readData();
-            this.dialog = false;
-            this.dialogConfirm = false;
-            this.inputType = 'Tambah'
+                this.resetForm();
+                this.readData();
+                this.dialog = false;
+                this.dialogConfirm = false;
+                this.inputType = 'Tambah'
             },
             resetForm(){
             this.form = {

@@ -12,7 +12,7 @@
             <v-img :src="logoAJR"></v-img>
           </v-list-item-avatar>
 
-          <v-list-item-title>Admin</v-list-item-title>
+          <v-list-item-title>Customer</v-list-item-title>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -46,11 +46,7 @@ export default {
      drawer:true,
      logoAJR: require('@/assets/logoAJR.png'),
      items: [
-       { title: "Profile", icon: "mdi-account-circle", to: "/profile-pegawai" },
-       { title: "Pegawai", icon: "mdi-account-tie", to: "/kelola-pegawai" },
-       { title: "Driver", icon: "mdi-card-account-details", to: "/kelola-driver" },
-       { title: "Mobil", icon: "mdi-car", to: "/kelola-mobil"},
-       { title: "Mitra", icon: "mdi-account-supervisor", to:"/kelola-mitra"},
+       { title: "Profile", icon: "mdi-account-circle", to: "/profile-customer" },
      ],
    }   
  },

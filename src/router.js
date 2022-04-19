@@ -12,29 +12,31 @@ const router = new VueRouter({
     routes: [
         {
             path:'/',
-            name:'main',
-            meta:{title:'main'},
+            name:'Main',
+            meta:{title:'Main'},
             component: importComponent('Main'),
         },
-        // {
-        //     path:"/register-customer",
-        //     name:"register-customer",
-        //     meta: {title:'Register'},
-        //     component: importComponent('Customer/Register'),
-        // },
-        // {
-        //     path:"/customer-profile",
-        //     name:"customer",
-        //     meta: {title:'customer'},
-        //     component: importComponent('Customer/Profile'),
-        // },
+        {
+            path:"/customer",
+            name:"Customer",
+            meta: {title:'Customer'},
+            component: importComponent('Customer/DashboardLayoutCustomer'),
+            children: [
+                {
+                    path: '/profile-customer',
+                    name: 'Profile',
+                    meta: {title: 'Profile'},
+                    component: importComponent('Customer/Profile'),
+                },
+            ]
+        },
         {
             path: '/admin',
             name: 'admin',
             component: importComponent('Admin/DashboardLayoutAdmin'),
             children: [
                 {
-                    path: '/profile',
+                    path: '/profile-pegawai',
                     name: 'Profile',
                     meta: {title: 'Profile'},
                     component: importComponent('Admin/Profile'),
