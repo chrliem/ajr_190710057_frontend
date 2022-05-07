@@ -13,9 +13,9 @@
             <v-img :src="logoAJR"></v-img>
           </v-list-item-avatar>
 
-          <v-list-item-title>Customer</v-list-item-title>
-          
+          <v-list-item-title><strong>Manager</strong></v-list-item-title>
         </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list nav>
@@ -34,9 +34,7 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          
         </v-list>
-        <br><br>
         <v-btn color="red" @click="logout">Logout</v-btn>
       </v-navigation-drawer>
       <router-view></router-view>
@@ -50,8 +48,10 @@ export default {
      drawer:true,
      logoAJR: require('@/assets/logoAJR.png'),
      items: [
-       { title: localStorage.getItem('nama'), icon: "mdi-account-circle", to: "/profile-customer" },
-       { title: "Transaksi", icon: "mdi-plus-box-multiple", to: "/transaksi" },
+       { title: localStorage.getItem('nama'), icon: "mdi-account-circle", to: "/profile-manager" },
+       { title: "Jadwal", icon: "mdi-account-clock", to: "/kelola-jadwal" },
+       { title: "Penjadwalan", icon: "mdi-account-multiple-plus", to: "/penjadwalan-pegawai" },
+       { title: "Promo", icon: "mdi-ticket-percent", to: "/kelola-promo" }
      ],
    }   
  },
@@ -64,7 +64,6 @@ export default {
         localStorage.removeItem('nama')
         this.$router.push({name:'Main'})
       },
-
 //       readData(){
 //             var url=this.$api+'/getuser/' + localStorage.getItem('id')
 //             this.$http.get(url,{

@@ -4,8 +4,9 @@
         v-model="drawer"
         :mini-variant.sync="mini"
         permanent
-        class="fullheight"
+        class="fullheight elevation-6"
         app
+        color="blue lighten-4"
       >
         <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -34,6 +35,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
+        <v-btn color="red" @click="logout">Logout</v-btn>
       </v-navigation-drawer>
       <router-view></router-view>
     </div>
@@ -46,7 +48,7 @@ export default {
      drawer:true,
      logoAJR: require('@/assets/logoAJR.png'),
      items: [
-       { title: "Profile", icon: "mdi-account-circle", to: "/profile-pegawai" },
+       { title: localStorage.getItem('nama'), icon: "mdi-account-circle", to: "/profile-admin" },
        { title: "Pegawai", icon: "mdi-account-tie", to: "/kelola-pegawai" },
        { title: "Driver", icon: "mdi-card-account-details", to: "/kelola-driver" },
        { title: "Mobil", icon: "mdi-car", to: "/kelola-mobil"},
@@ -55,23 +57,25 @@ export default {
    }   
  },
  
-//  methods:{
-//       logout(){
-//         localStorage.removeItem('id')
-//         localStorage.removeItem('token')
-//         this.$router.push('/login')
-//       },
-//       readData(){
-//             var url=this.$api+'/getuser/' + localStorage.getItem('id')
-//             this.$http.get(url,{
-//                 headers:{
-//                     'Authorization':'Bearer '+localStorage.getItem('token')
-//                 }
-//             }).then(response=>{
-//                 this.users=response.data.data
-//             })
-//         },
-//  },
+ methods:{
+      logout(){
+        localStorage.removeItem('id')
+        localStorage.removeItem('token')
+        localStorage.removeItem('role')
+        localStorage.removeItem('nama')
+        this.$router.push({name:'Main'})
+      },
+      // readData(){
+      //       var url=this.$api+'/getuser/' + localStorage.getItem('id')
+      //       this.$http.get(url,{
+      //           headers:{
+      //               'Authorization':'Bearer '+localStorage.getItem('token')
+      //           }
+      //       }).then(response=>{
+      //           this.users=response.data.data
+      //       })
+      //   },
+ },
 //  mounted(){
 //         this.readData();
 //     },

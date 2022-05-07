@@ -28,15 +28,22 @@ const router = new VueRouter({
                     meta: {title: 'Profile'},
                     component: importComponent('Customer/Profile'),
                 },
+                {
+                    path: '/transaksi',
+                    name: 'Transaksi',
+                    meta: {title: 'Transaksi'},
+                    component: importComponent('Customer/Transaksi'),
+                },
             ]
         },
         {
             path: '/admin',
-            name: 'admin',
+            name: 'Admin',
+            meta: {title: 'Admin'},
             component: importComponent('Admin/DashboardLayoutAdmin'),
             children: [
                 {
-                    path: '/profile-pegawai',
+                    path: '/profile-admin',
                     name: 'Profile',
                     meta: {title: 'Profile'},
                     component: importComponent('Admin/Profile'),
@@ -67,38 +74,64 @@ const router = new VueRouter({
                 }
             ]
         },
-    //     {
-    //         path: '/customerservice',
-    //         name: 'customerservice',
-    //         component: importComponent('CustomerService/DashboardLayout'),
-    //         children: [
-    //             {
-    //                 path: '/customer',
-    //                 name: 'customer',
-    //                 meta: {title: 'customer'},
-    //                 component: importComponent('CustomerService/Customer'),
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         path: '/manager',
-    //         name: 'manager',
-    //         component: importComponent('Manager/DashboardLayout'),
-    //         children: [
-    //             {
-    //                 path: '/promo',
-    //                 name: 'promo',
-    //                 meta: {title: 'promo'},
-    //                 component: importComponent('Manager/Promo'),
-    //             },
-    //             {
-    //                 path: '/jadwal',
-    //                 name: 'jadwal',
-    //                 meta: {title: 'jadwal'},
-    //                 component: importComponent('Manager/Jadwal'),
-    //             }
-    //         ]
-    //     },
+        {
+            path: '/customerservice',
+            name: 'Customer Service',
+            meta: {title: 'Customer Service'},
+            component: importComponent('CustomerService/DashboardLayoutCustomerService'),
+            children: [
+                {
+                    path: '/profile-customerservice',
+                    name: 'Profile Customer Service',
+                    meta: {title: 'Profile'},
+                    component: importComponent('CustomerService/Profile'),
+                },
+                {
+                    path: '/data-customer',
+                    name: 'Data Customer',
+                    meta: {title: 'Customer'},
+                    component: importComponent('CustomerService/Customer'),
+                },
+                {
+                    path: '/data-transaksi',
+                    name: 'Data Transaksi',
+                    meta: {title: 'Transaksi'},
+                    component: importComponent('CustomerService/Transaksi'),
+                }
+            ]
+        },
+        {
+            path: '/manager',
+            name: 'Manager',
+            meta: {title: 'Manager'},
+            component: importComponent('Manager/DashboardLayoutManager'),
+            children: [
+                {
+                    path: '/profile-manager',
+                    name: 'Profile Manager',
+                    meta: {title: 'Profile'},
+                    component: importComponent('Manager/Profile'),
+                },
+                {
+                    path: '/kelola-promo',
+                    name: 'Promo',
+                    meta: {title: 'Promo'},
+                    component: importComponent('Manager/Promo'),
+                },
+                {
+                    path: '/penjadwalan-pegawai',
+                    name: 'Detail Jadwal Pegawai',
+                    meta: {title: 'Penjadwalan Pegawai'},
+                    component: importComponent('Manager/DetailJadwal'),
+                },
+                {
+                    path: '/kelola-jadwal',
+                    name: 'Jadwal Pegawai',
+                    meta: {title: 'Jadwal Pegawai'},
+                    component: importComponent('Manager/Jadwal'),
+                }
+            ]
+        },
         
         
         
@@ -107,7 +140,33 @@ const router = new VueRouter({
 
 router.beforeEach((to,from,next)=>{
     document.title=to.meta.title
-    next()
+    if (to.name !== 'Main' && localStorage.getItem('token')===null) next({ name: 'Main' })
+    else next()
 })
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Manager' && localStorage.getItem('role')!=='Manager') next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Customer Service' && localStorage.getItem('role')!=='Customer Service') next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Admin' && localStorage.getItem('role')!=='Admin') next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Customer' && localStorage.getItem('role')!=='Customer') next({ name: localStorage.getItem('role')})
+    else next()
+})
+
 
 export default router;

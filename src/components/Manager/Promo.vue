@@ -1,7 +1,7 @@
 <template>
-    <v-main class="list">
-        <v-container>
-            <h2 class="text-h3" font-weight-medium mb-5> Mitra </h2>
+    <v-main class="list" >
+        <v-container >
+            <h2 class="text-h3" font-weight-medium mb-5>Promo </h2>
         </v-container>
 
         <v-container>
@@ -10,38 +10,42 @@
                 <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
                 </v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn color="success" dark @click="dialog = true"> Tambah Mitra</v-btn>
+                <v-btn color="success" dark @click="dialog = true"> Tambah Promo</v-btn>
             </v-card-title>
         </v-card>
         </v-container>
 
         <v-container>
         <v-card class="elevation-6">
-            <v-data-table :headers="headers" :items="mitras" :search="search">
-                 <template v-slot:[`item.status_aktif`]="{ item }">
-                    <span v-if="item.status_aktif===0"><v-chip color="orange">Tidak Aktif</v-chip></span>
-                    <span v-else-if="item.status_aktif===1"><v-chip color="green" >Aktif</v-chip></span>
+            <v-data-table :items-per-page="5" :headers="headers" :items="promos" :search="search">
+                 <template v-slot:[`item.status_promo`]="{ item }">
+                    <span v-if="item.status_promo===0"><v-chip color="orange">Tidak Aktif</v-chip></span>
+                    <span v-else-if="item.status_promo===1"><v-chip color="green" >Aktif</v-chip></span>
+                </template>
+                <template v-slot:[`item.potongan_promo`]="{ item }">
+                    <span>{{item.potongan_promo*100}}%</span>
                 </template>
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-chip><v-icon color="blue" @click="editHandler(item)">mdi-pencil</v-icon></v-chip>
-                   <v-chip v-show="item.status_aktif===1"><v-icon color="red" @click="deleteHandler(item.id_mitra)">mdi-delete</v-icon></v-chip>                 
+                    <v-chip v-show="item.status_promo===1"><v-icon color="red" @click="deleteHandler(item.id_promo)">mdi-delete</v-icon></v-chip>                  
+
                 </template>
             </v-data-table>
         </v-card>
         </v-container>
 
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
+      <v-card >
         <v-card-title>
-          <span class="headline"> {{formTitle}} Mitra </span>
+          <span class="headline"> {{formTitle}} Promo </span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.nama_mitra" label="Nama Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.no_ktp_mitra" label="No KTP Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.alamat_mitra" label="Alamat Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.no_telepon_mitra" label="No Telepon Mitra" required></v-text-field> 
-            <v-radio-group v-if="cekStatusAktif(form.status_aktif)"  v-model="form.status_aktif" label="Status Aktif" required>
+            <v-text-field v-model="form.kode_promo" label="Kode Promo" required></v-text-field>
+            <v-text-field  v-model="form.jenis_promo" label="Jenis Promo" required></v-text-field>
+            <v-textarea  v-model="form.keterangan" label="Keterangan" required></v-textarea>
+            <v-text-field  type="number" v-model="form.potongan_promo" append-icon="mdi-percent" label="Potongan Promo" required></v-text-field> 
+            <v-radio-group  v-model="form.status_promo" label="Status Promo" required>
               <v-radio v-bind:value="1" label="Aktif"></v-radio>
               <v-radio v-bind:value="0" label="Tidak Aktif"></v-radio>
             </v-radio-group> 
@@ -67,7 +71,7 @@
         <v-card-title>
           <span class="headline">Warning!</span>
         </v-card-title>
-        <v-card-text>Anda yakin ingin menghapus mitra ini?</v-card-text>
+        <v-card-text>Anda yakin ingin menghapus promo ini?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
@@ -85,7 +89,7 @@
 <script>
 /* eslint-disable */ 
 export default({
-    name:"Mitra",
+    name:"Promo",
     data() {
         return{
             inputType: 'Tambah',
@@ -99,20 +103,21 @@ export default({
             dialog: false,
             dialogConfirm: false,
             headers: [
-                {text: "Nama Mitra", value: "nama_mitra"},
-                {text: "Nomor KTP", value: "no_ktp_mitra"},
-                {text: "Alamat", value: "alamat_mitra"},
-                {text: "No Telepon", value: "no_telepon_mitra"},
-                {text: "Status Aktif", value: "status_aktif"},
+                {text: "Kode Promo", value: "kode_promo"},
+                {text: "Jenis Promo", value: "jenis_promo"},
+                {text: "Keterangan", value: "keterangan"},
+                {text: "Potongan Promo", value: "potongan_promo"},
+                {text: "Status Promo", value: "status_promo"},
                 {text: "Actions", value: "actions"}
             ],
-            mitra: new FormData,
-            mitras: [],
+            promo: new FormData,
+            promos: [],
             form: {
-                nama_mitra: '',
-                no_ktp_mitra: '',
-                alamat_mitra: '',
-                no_telepon_mitra: ''
+                kode_promo: '',
+                jenis_promo: '',
+                keterangan: '',
+                potongan_promo: '',
+                status_promo: ''
             },
             editId: '',
             deleteId: '',
@@ -126,31 +131,33 @@ export default({
                 this.save();
             }
         },
-        cekStatusAktif(status_aktif){
-            if(status_aktif===0){
+        cekStatusPromo(status_promo){
+            if(status_promo===0){
                 return true;
             }else{
                 return false;
             }
         },
         readData(){
-            var url=this.$api+'/mitra/'
+            var url=this.$api+'/promo/'
                 this.$http.get(url,{
                     headers:{
                         'Authorization':'Bearer '+localStorage.getItem('token'),
                     }
                 }).then(response=>{
-                    this.mitras=response.data.data
+                    this.promos=response.data.data
                 })
         },
         save(){
-            this.mitra.append('nama_mitra',this.form.nama_mitra);
-            this.mitra.append('alamat_mitra',this.form.alamat_mitra);
-            this.mitra.append('no_ktp_mitra',this.form.no_ktp_mitra);
-            this.mitra.append('no_telepon_mitra',this.form.no_telepon_mitra);
-            var url = this.$api+'/mitra/'
+            var convertPotongan = this.form.potongan_promo/100;
+            this.promo.append('kode_promo',this.form.kode_promo);
+            this.promo.append('jenis_promo',this.form.jenis_promo);
+            this.promo.append('keterangan',this.form.keterangan);
+            this.promo.append('potongan_promo',convertPotongan);
+            this.promo.append('status_promo',this.form.status_promo);
+            var url = this.$api+'/promo/'
             this.load = true;
-            this.$http.post(url, this.mitra, {
+            this.$http.post(url, this.promo, {
                 headers: {
                 'Authorization':'Bearer' + localStorage.getItem('token'),
                 }
@@ -170,14 +177,15 @@ export default({
             });
         },
         update(){
-            this.mitra.append('nama_mitra',this.form.nama_mitra);
-            this.mitra.append('alamat_mitra',this.form.alamat_mitra);
-            this.mitra.append('no_ktp_mitra',this.form.no_ktp_mitra);
-            this.mitra.append('no_telepon_mitra',this.form.no_telepon_mitra);
-            this.mitra.append('status_aktif',this.form.status_aktif);
-            var url = this.$api+'/mitra/'+this.editId;
+            var convertPotongan = this.form.potongan_promo/100;
+            this.promo.append('kode_promo',this.form.kode_promo);
+            this.promo.append('jenis_promo',this.form.jenis_promo);
+            this.promo.append('keterangan',this.form.keterangan);
+            this.promo.append('potongan_promo',convertPotongan);
+            this.promo.append('status_promo',this.form.status_promo);
+            var url = this.$api+'/promo/'+this.editId;
                 this.load = true;
-                this.$http.post(url, this.mitra, {
+                this.$http.post(url, this.promo, {
                     headers: {
                     'Authorization':'Bearer' + localStorage.getItem('token'),
                     }
@@ -198,7 +206,7 @@ export default({
                 });
         },
         deleteData(){
-            var url = this.$api+'/mitra/'+this.deleteId+'/delete';
+            var url = this.$api+'/promo/'+this.deleteId+'/delete';
             this.load = true;
             this.$http.put(url,{
                 headers: {
@@ -229,24 +237,25 @@ export default({
             },
         resetForm(){
             this.form = {
-                nama_mitra: null,
-                no_ktp_mitra: null,
-                alamat_mitra: null,
-                no_telepon_mitra: null
+                kode_promo: '',
+                jenis_promo: '',
+                keterangan: '',
+                potongan_promo: '',
+                status_promo: ''
             }
         },
         editHandler(item){
             this.inputType = 'Ubah';
-            this.editId = item.id_mitra;
-            this.form.nama_mitra = item.nama_mitra;
-            this.form.no_ktp_mitra = item.no_ktp_mitra;
-            this.form.no_telepon_mitra = item.no_telepon_mitra;
-            this.form.alamat_mitra = item.alamat_mitra;
-            this.form.status_aktif = item.status_aktif;
+            this.editId = item.id_promo;
+            this.form.kode_promo = item.kode_promo;
+            this.form.jenis_promo = item.jenis_promo;
+            this.form.keterangan = item.keterangan;
+            this.form.potongan_promo = item.potongan_promo*100;
+            this.form.status_promo = item.status_promo;
             this.dialog = true;
         },
-        deleteHandler(id){
-            this.deleteId = id;
+        deleteHandler(id_promo){
+            this.deleteId = id_promo;
             this.dialogConfirm = true;
         },
         close(){

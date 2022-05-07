@@ -1,7 +1,7 @@
 <template>
     <v-main class="list">
         <v-container>
-            <h2 class="text-h3" font-weight-medium mb-5> Mitra </h2>
+            <h2 class="text-h3" font-weight-medium mb-5> Jadwal Pegawai </h2>
         </v-container>
 
         <v-container>
@@ -10,21 +10,20 @@
                 <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details>
                 </v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn color="success" dark @click="dialog = true"> Tambah Mitra</v-btn>
+                <v-btn color="success" dark @click="dialog = true"> Tambah Pilihan Jadwal</v-btn>
             </v-card-title>
         </v-card>
         </v-container>
 
         <v-container>
         <v-card class="elevation-6">
-            <v-data-table :headers="headers" :items="mitras" :search="search">
-                 <template v-slot:[`item.status_aktif`]="{ item }">
-                    <span v-if="item.status_aktif===0"><v-chip color="orange">Tidak Aktif</v-chip></span>
-                    <span v-else-if="item.status_aktif===1"><v-chip color="green" >Aktif</v-chip></span>
-                </template>
+            <v-data-table :headers="headers" :items="jadwals" :search="search">
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-chip><v-icon color="blue" @click="editHandler(item)">mdi-pencil</v-icon></v-chip>
-                   <v-chip v-show="item.status_aktif===1"><v-icon color="red" @click="deleteHandler(item.id_mitra)">mdi-delete</v-icon></v-chip>                 
+                    <!-- <v-chip><v-icon color="blue" @click="editHandler(item)">mdi-pencil</v-icon></v-chip> -->
+                   <v-chip><v-icon color="red" @click="deleteHandler(item.id_jadwal)">mdi-delete</v-icon></v-chip>                 
+                </template>
+                 <template v-slot:[`item.shift`]="{ item }">
+                    <span>Shift {{item.shift}}</span>            
                 </template>
             </v-data-table>
         </v-card>
@@ -33,17 +32,19 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline"> {{formTitle}} Mitra </span>
+          <span class="headline"> {{formTitle}} Pilihan Jadwal </span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.nama_mitra" label="Nama Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.no_ktp_mitra" label="No KTP Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.alamat_mitra" label="Alamat Mitra" required></v-text-field>
-            <v-text-field v-show="cekStatusAktif(form.status_aktif)===false" v-model="form.no_telepon_mitra" label="No Telepon Mitra" required></v-text-field> 
-            <v-radio-group v-if="cekStatusAktif(form.status_aktif)"  v-model="form.status_aktif" label="Status Aktif" required>
-              <v-radio v-bind:value="1" label="Aktif"></v-radio>
-              <v-radio v-bind:value="0" label="Tidak Aktif"></v-radio>
+            <v-text-field prefix="Shift" type="number" min="1" v-model="form.shift" required></v-text-field>
+            <v-radio-group v-model="form.hari" label="Hari" required>
+              <v-radio value="Senin" label="Senin"></v-radio>
+              <v-radio value="Selasa" label="Selasa"></v-radio>
+              <v-radio value="Rabu" label="Rabu"></v-radio>
+              <v-radio value="Kamis" label="Kamis"></v-radio>
+              <v-radio value="Jumat" label="Jumat"></v-radio>
+              <v-radio value="Sabtu" label="Sabtu"></v-radio>
+              <v-radio value="Minggu" label="Minggu"></v-radio>
             </v-radio-group> 
           </v-container>
         </v-card-text>
@@ -67,12 +68,17 @@
         <v-card-title>
           <span class="headline">Warning!</span>
         </v-card-title>
-        <v-card-text>Anda yakin ingin menghapus mitra ini?</v-card-text>
+        <v-card-text>Anda yakin ingin menghapus pilihan jadwal ini?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
           <v-btn color="red" text @click="deleteData">Hapus</v-btn>          
         </v-card-actions>
+        <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
+            <div v-if="error_message">
+                    Silakan hapus pegawai yang memiliki jadwal ini di Penjadwalan Pegawai
+            </div>
+        </v-snackbar>
       </v-card>
     </v-dialog>
 
@@ -85,34 +91,31 @@
 <script>
 /* eslint-disable */ 
 export default({
-    name:"Mitra",
+    name:"Jadwal",
     data() {
         return{
             inputType: 'Tambah',
             snackbar: false,
             snackbar1: false,
             error_message: '',
-            response_message: '',
+            response_message:'',
             load: false,
             color: '',
             search: null,
             dialog: false,
             dialogConfirm: false,
             headers: [
-                {text: "Nama Mitra", value: "nama_mitra"},
-                {text: "Nomor KTP", value: "no_ktp_mitra"},
-                {text: "Alamat", value: "alamat_mitra"},
-                {text: "No Telepon", value: "no_telepon_mitra"},
-                {text: "Status Aktif", value: "status_aktif"},
+                {text: "Hari", value: "hari"},
+                {text: "Shift", value: "shift"},
                 {text: "Actions", value: "actions"}
             ],
-            mitra: new FormData,
-            mitras: [],
+            jadwal: new FormData,
+            jadwals: [],
             form: {
-                nama_mitra: '',
-                no_ktp_mitra: '',
-                alamat_mitra: '',
-                no_telepon_mitra: ''
+                shift: '',
+                jam_mulai: '',
+                jam_selesai: '',
+                hari: ''
             },
             editId: '',
             deleteId: '',
@@ -126,36 +129,32 @@ export default({
                 this.save();
             }
         },
-        cekStatusAktif(status_aktif){
-            if(status_aktif===0){
-                return true;
-            }else{
-                return false;
-            }
-        },
         readData(){
-            var url=this.$api+'/mitra/'
+            var url=this.$api+'/jadwalpegawai/'
                 this.$http.get(url,{
                     headers:{
                         'Authorization':'Bearer '+localStorage.getItem('token'),
                     }
                 }).then(response=>{
-                    this.mitras=response.data.data
+                    this.jadwals=response.data.data
                 })
         },
         save(){
-            this.mitra.append('nama_mitra',this.form.nama_mitra);
-            this.mitra.append('alamat_mitra',this.form.alamat_mitra);
-            this.mitra.append('no_ktp_mitra',this.form.no_ktp_mitra);
-            this.mitra.append('no_telepon_mitra',this.form.no_telepon_mitra);
-            var url = this.$api+'/mitra/'
+                this.jadwal.append('shift', this.form.shift);
+                this.jadwal.append('hari',this.form.hari);
+
+            
+            var url = this.$api+'/jadwalpegawai/'
             this.load = true;
-            this.$http.post(url, this.mitra, {
+            this.$http.post(url, this.jadwal, {
                 headers: {
                 'Authorization':'Bearer' + localStorage.getItem('token'),
                 }
             }).then(response => {
                 this.response_message = response.data.message;
+                if(this.response_message === 'Pilihan jadwal sudah ada'){
+                    this.color = 'red';
+                }else
                 this.color = "green";
                 this.snackbar1 = true;
                 this.load = true;
@@ -170,14 +169,12 @@ export default({
             });
         },
         update(){
-            this.mitra.append('nama_mitra',this.form.nama_mitra);
-            this.mitra.append('alamat_mitra',this.form.alamat_mitra);
-            this.mitra.append('no_ktp_mitra',this.form.no_ktp_mitra);
-            this.mitra.append('no_telepon_mitra',this.form.no_telepon_mitra);
-            this.mitra.append('status_aktif',this.form.status_aktif);
-            var url = this.$api+'/mitra/'+this.editId;
+            this.jadwal.append('shift', this.form.shift);
+            this.jadwal.append('hari',this.form.hari);
+
+            var url = this.$api+'/jadwalpegawai/'+this.editId;
                 this.load = true;
-                this.$http.post(url, this.mitra, {
+                this.$http.post(url, this.jadwal, {
                     headers: {
                     'Authorization':'Bearer' + localStorage.getItem('token'),
                     }
@@ -198,9 +195,9 @@ export default({
                 });
         },
         deleteData(){
-            var url = this.$api+'/mitra/'+this.deleteId+'/delete';
+            var url = this.$api+'/jadwalpegawai/'+this.deleteId;
             this.load = true;
-            this.$http.put(url,{
+            this.$http.delete(url,{
                 headers: {
                 'Authorization':'Bearer' + localStorage.getItem('token'),
                 }
@@ -213,6 +210,7 @@ export default({
                 this.readData();
                 this.resetForm();
                 this.inputType='Tambah';
+                location.reload();
             }).catch(error=>{
                 this.error_message = error.response.data.message;
                 this.color = "blue";
@@ -229,24 +227,19 @@ export default({
             },
         resetForm(){
             this.form = {
-                nama_mitra: null,
-                no_ktp_mitra: null,
-                alamat_mitra: null,
-                no_telepon_mitra: null
+                shift: '',
+                hari: ''
             }
         },
         editHandler(item){
             this.inputType = 'Ubah';
-            this.editId = item.id_mitra;
-            this.form.nama_mitra = item.nama_mitra;
-            this.form.no_ktp_mitra = item.no_ktp_mitra;
-            this.form.no_telepon_mitra = item.no_telepon_mitra;
-            this.form.alamat_mitra = item.alamat_mitra;
-            this.form.status_aktif = item.status_aktif;
+            this.editId = item.id_jadwal;
+            this.form.shift = item.shift;
+            this.form.hari = item.hari
             this.dialog = true;
         },
-        deleteHandler(id){
-            this.deleteId = id;
+        deleteHandler(id_jadwal){
+            this.deleteId = id_jadwal;
             this.dialogConfirm = true;
         },
         close(){
