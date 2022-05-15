@@ -31,6 +31,11 @@
                     <span v-if="item.kemampuan_bahasa_asing===0"><v-chip color="orange">Tidak Bisa</v-chip></span>
                     <span v-else-if="item.kemampuan_bahasa_asing===1"><v-chip color="green">Bisa</v-chip></span>
                 </template>
+                <template v-slot:[`item.rerata_rating`]="{ item }">
+                    <span v-for="driverRate in driverRates" :key="driverRate.id_driver">
+                        <span v-if="item.id_driver===driverRate.id_driver"><v-icon color="warning">mdi-star</v-icon> {{formatNumber(driverRate.rerata_rating)}}</span>
+                    </span>
+                </template>
                 <template v-slot:[`item.foto_driver`]="{ item }">
                      <v-img
                         :src="$baseURL+'/storage/foto_driver/'+item.foto_driver"
@@ -106,7 +111,6 @@
             <div class="text-left"><strong>Jenis Kelamin </strong>   : {{driver1.jenis_kelamin_driver}}</div>
             <div class="text-left"><strong>No Telepon    </strong>   : {{driver1.no_telepon_driver}}</div>
             <div class="text-left"><strong>Alamat email  </strong>   : {{driver1.email}}</div>
-            <div class="text-left"><strong>Rerata Rating </strong>   : Coding 3 Soon</div>
             <div class="text-left"><strong>Tarif harian </strong>   : {{driver1.tarif_driver_harian}}</div>
             <div class="text-left"><strong>Nomor SIM </strong>   : {{driver1.no_sim_driver}}</div>
             <div class="text-left"><strong>Kemampuan Bahasa Asing </strong>   : {{setKemampuanBahasa(driver1.kemampuan_bahasa_asing)}}</div>
@@ -337,7 +341,7 @@ export default {
                     // {text: "No Telepon", value: "no_telepon_driver"},
                     // {text: "Email", value:"email_driver"},
                     // {text: "Tarif Harian", value: "tarif_driver_harian", align: "center"},
-                    {text: "Rerata Rating (CODING 3 SOON)",  align:"center"},
+                    {text: "Rerata Rating", value:"rerata_rating",  align:"center"},
                     {text: "Status Aktif", value: "status_aktif", align: "center"},
                     {text: "Status Ketersediaan", value: "status_ketersediaan_driver", align: "center"},
                     {text: "Kemampuan Bahasa Asing", value: "kemampuan_bahasa_asing", align: "center"},
@@ -352,6 +356,7 @@ export default {
                 driver: new FormData,
                 driver1: [],
                 drivers: [],
+                driverRates: [],
                 form: {
                     nama_driver: '',
                     alamat_driver: '',
@@ -382,6 +387,9 @@ export default {
                 }else{
                     this.save();
                 }
+            },
+            formatNumber(rerata_rating){
+                return Number(rerata_rating).toFixed(2)
             },
             cekInputType(){
                 if(this.inputType==='Tambah'){
@@ -444,13 +452,13 @@ export default {
                     })
             },
             getRerataDriver(){
-                var url=this.$api+'/driver/'+this.getId+'/rerata'
+                var url=this.$api+'/average-ratingdriver'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
                         }
                     }).then(response=>{
-                        this.driver2=response.data.data
+                        this.driverRates=response.data.data
                     })
             },
             save(){
@@ -706,6 +714,7 @@ export default {
             this.readData();
             this.readDatabyId();
             this.getRerataDriver();
+        
         }
 }
 </script>

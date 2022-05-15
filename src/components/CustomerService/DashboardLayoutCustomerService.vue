@@ -48,7 +48,7 @@ export default {
      drawer:true,
      logoAJR: require('@/assets/logoAJR.png'),
      items: [
-       {title: localStorage.getItem('id'), icon:"mdi-account-circle", to: "/profile-customerservice"},
+       {title: localStorage.getItem('nama'), icon:"mdi-account-circle", to: "/profile-customerservice"},
        { title: "Customer", icon: "mdi-account-supervisor", to: "/data-customer" },
        { title: "Transaksi", icon: "mdi-plus-box-multiple", to: "/data-transaksi" },
      ],

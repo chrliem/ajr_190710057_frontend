@@ -59,7 +59,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Simpan</v-btn>          
+          <v-btn color="blue darken-1" text @click="save">Regsiter</v-btn>          
         </v-card-actions>
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
             <div v-for="(errorArray, index) in error_message" :key="index">
@@ -85,7 +85,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
-          <v-btn color="blue darken-1" text @click="login">Simpan</v-btn>          
+          <v-btn color="blue darken-1" text @click="login">Login</v-btn>          
         </v-card-actions>
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
             <div v-for="(errorArray, index) in error_message" :key="index">

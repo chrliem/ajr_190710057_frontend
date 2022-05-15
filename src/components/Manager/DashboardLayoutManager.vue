@@ -38,6 +38,7 @@
         <v-btn color="red" @click="logout">Logout</v-btn>
       </v-navigation-drawer>
       <router-view></router-view>
+        
     </div>
 </template>
 <script>
@@ -51,7 +52,8 @@ export default {
        { title: localStorage.getItem('nama'), icon: "mdi-account-circle", to: "/profile-manager" },
        { title: "Jadwal", icon: "mdi-account-clock", to: "/kelola-jadwal" },
        { title: "Penjadwalan", icon: "mdi-account-multiple-plus", to: "/penjadwalan-pegawai" },
-       { title: "Promo", icon: "mdi-ticket-percent", to: "/kelola-promo" }
+       { title: "Promo", icon: "mdi-ticket-percent", to: "/kelola-promo" },
+       { title: "Rating AJR", icon: "mdi-star", to: "/rating-ajr" }
      ],
    }   
  },

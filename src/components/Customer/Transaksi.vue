@@ -5,9 +5,13 @@
         </v-container>
 
         <v-container>
-            <v-card color="orange lighten-2+" class="elevation-6">
+            <v-card class="elevation-6">
                 <v-card-title>
-                <v-btn :disabled="cekVerifikasiCustomer===true" color="success" dark @click="dialog=true"> Tambah Transaksi Penyewaan </v-btn>
+                <v-btn :disabled="customers.tipe_sewa_customer===null" color="success" @click="dialog=true"> TAMBAH TRANSAKSI PENYEWAAN </v-btn> 
+                
+                </v-card-title>
+                <v-card-title v-show="customers.tipe_sewa_customer===null" >
+                    <v-chip color="error"> Customer Belum Diverifikasi </v-chip>
                 </v-card-title>
             </v-card>
         </v-container>
@@ -47,16 +51,13 @@
                             class="rounded pa-1 text-center text-no-wrap"><strong>{{transaksi.status_transaksi}}</strong></div>
                     </v-card-text>
                     <v-divider></v-divider>
-                    <v-card>
                     <v-card-text>
                     <v-card-actions class="justify-center">
-                         <v-btn color="success" @click="viewHandler(transaksi.no_transaksi)"><v-icon>mdi-eye-circle</v-icon>View</v-btn>
-                        <v-btn v-show="transaksi.status_transaksi==='Selesai'" color="warning" @click="ratingHandler(transaksi)"><v-icon>mdi-star</v-icon> Give Rating</v-btn>
-                        <v-btn v-show="transaksi.status_transaksi==='Selesai'" color="primary" @click="print(transaksi.no_transaksi)"><v-icon></v-icon> Print </v-btn>
+                        <v-btn small color="success" @click="viewHandler(transaksi.no_transaksi)"><v-icon>mdi-eye-circle</v-icon>View</v-btn>
+                        <v-btn small v-show="transaksi.status_transaksi==='Selesai' && transaksi.rating_ajr===null" color="warning" @click="ratingHandler(transaksi)"><v-icon>mdi-star</v-icon>Rating</v-btn>
+                        <v-btn small  v-show="transaksi.status_transaksi==='Selesai'" color="primary" @click="print(transaksi.no_transaksi)"><v-icon>mdi-printer</v-icon> Print </v-btn>
                     </v-card-actions>
                     </v-card-text>
-                    </v-card>
-                    
                     </v-card>
                     </v-hover>
                 </v-col>
@@ -74,7 +75,7 @@
             <v-text-field v-model="form.nama_customer" label="Nama Customer"  disabled></v-text-field>
             <v-radio-group  v-model="form.jenis_transaksi" label="Jenis Transaksi" required>
               <v-radio value="1" label="Sewa Mobil dengan Driver"></v-radio>
-              <v-radio v-show="cekTipeTransaksi===true" value="2" label="Sewa Mobil"></v-radio>
+              <v-radio v-show="customers.tipe_sewa_customer===1" value="2" label="Sewa Mobil"></v-radio>
             </v-radio-group>
             <v-radio-group v-show="form.jenis_transaksi!==''" v-model="form.pilihan_mobil" label="Pilihan Mobil Tersedia" required>
           <v-radio v-for="mobil in mobils" v-show="mobil.status_ketersediaan_mobil===1" :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
@@ -132,18 +133,21 @@
                 </v-col>
             </v-row>
             <v-radio-group  v-model="form.pilihan_promo" label="Pilihan Promo" required>
-                <v-radio v-for="promo in promos" v-show="promo.status_aktif===1" :label="promo.kode_promo" :key="promo.id_promo" :value="promo.id_promo">{{promo.keterangan}}
+                <v-radio :checked="isChecked" v-for="promo in promos" v-show="promo.status_promo===1" :label="promo.kode_promo" :key="promo.id_promo" :value="promo.id_promo">
                 <template v-slot:label>
                         <v-card width="300px" color="white">
                             <v-divider></v-divider>
                             <v-card-text>
+                            <div class="text-left"><strong>Kode Promo </strong>   : {{promo.kode_promo}}</div>
                             <div class="text-left"><strong>Keterangan </strong>   : {{promo.keterangan}}</div>
-                            <div class="text-left"><strong>Potongan Promo </strong>   : {{promo.potongan_promo*100}} %</div>
+                            <div class="text-left"><strong>Potongan Promo </strong>   : {{promo.potongan_promo*100}} %</div> 
                             </v-card-text>
                         </v-card>
-                    </template>
+                    </template> 
                 </v-radio>
+                <v-btn small text @click="uncheck">Batal Pilihan Promo</v-btn>
             </v-radio-group>
+            
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -152,7 +156,11 @@
           <v-btn color="blue darken-1" text @click="setForm">Simpan</v-btn>          
         </v-card-actions>
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-            {{error_message}}
+           <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
         </v-snackbar>
         
       </v-card>
@@ -209,6 +217,7 @@
         <br>
           <div class="text-left"><strong>Tanggal Mulai Sewa </strong>           : {{transaksi1.tgl_mulai_sewa}}</div>
           <div class="text-left"><strong>Tanggal Selesai Sewa  </strong>        : {{transaksi1.tgl_selesai_sewa}}</div>
+           <div class="text-left"><strong>Durasi Sewa  </strong>        : {{transaksi1.durasi_penyewaan}} Hari</div>
             <div class="text-left"><strong>Tanggal Pengembalian  </strong>      : {{transaksi1.tgl_pengembalian}}</div>
             <br><v-divider></v-divider><br>
             <div><strong>RINCIAN BIAYA</strong></div><br>
@@ -216,9 +225,14 @@
             <div class="text-left"><strong>Total Biaya Driver  </strong>   : Rp {{transaksi1.total_biaya_driver}}</div>
             <div class="text-left"><strong>Total Biaya Ekstensi  </strong>   : Rp {{transaksi1.total_biaya_ekstensi}}</div>
             <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Promo  </strong>   : {{transaksi1.kode_promo}}</div>
-            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Potongan Promo  </strong>   : {{transaksi1.potongan_promo}}</div>
+            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Potongan Promo  </strong>   : {{transaksi1.potongan_promo*100}}%</div>
             <v-divider></v-divider>
-            <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran}}</div>
+             <span v-if="transaksi1.tgl_pengembalian===null">
+                <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran-transaksi1.grand_total_pembayaran*transaksi1.potongan_promo}}</div>
+            </span>
+            <span v-else>
+                <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran}}</div>
+            </span>
             <v-divider></v-divider><br>
             <div class="text-left"><strong>Metode Pembayaran  </strong>   : {{transaksi1.metode_pembayaran}}</div>
             <div class="text-left"><strong>Status Pembayaran  </strong>   :</div>
@@ -238,14 +252,16 @@
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img max-height="1000px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
+                <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             </v-card-text>
             <v-card-text>
           <v-card-actions class="justify-center">
-              <v-btn :disabled="transaksi1.status_transaksi==='Selesai'||transaksi1.status_transaksi==='Batal'" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn>
-              <v-btn :disabled="transaksi1.status_transaksi!=='Menunggu Verifikasi'" color="error" @click="deleteHandler(transaksi1.no_transaksi)">Pembatalan</v-btn> 
+              <!-- <v-btn :disabled="transaksi1.status_transaksi==='Selesai'||transaksi1.status_transaksi==='Batal'||transaksi1.status_transaksi==='Menunggu Verifikasi'||transaksi1.status_transaksi==='Verifikasi Ditolak'" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn> -->
+              <!-- <v-btn :disabled="transaksi1.status_transaksi!=='Menunggu Verifikasi'" color="error" @click="deleteHandler(transaksi1.no_transaksi)">Pembatalan</v-btn>  -->
+              <v-btn :disabled="transaksi1.tgl_pengembalian===null" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn>
+
           </v-card-actions>
           </v-card-text>
             </v-card>
@@ -278,14 +294,19 @@
           <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="update">Simpan</v-btn>          
         </v-card-actions>
+        
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-            {{error_message}}
+           <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
         </v-snackbar>
         
       </v-card>
     </v-dialog>
 
-     <v-dialog v-model="dialogConfirm" persistent max-width="400px">
+     <!-- <v-dialog v-model="dialogConfirm" persistent max-width="400px">
       <v-card>
         <v-card-title>
           <span class="headline">Warning!</span>
@@ -296,8 +317,15 @@
           <v-btn color="blue darken-1" text @click="cancel1">Tidak</v-btn>
           <v-btn color="blue darken-1" text @click="deleteData">Ya</v-btn>          
         </v-card-actions>
+        <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
+           <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
+        </v-snackbar>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <v-dialog v-model="dialogRating1" persistent max-width="400px">
       <v-card>
@@ -317,7 +345,11 @@
         </v-card-actions>
 
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-            {{error_message}}
+           <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
         </v-snackbar>
       </v-card>
     </v-dialog>
@@ -336,10 +368,21 @@
           <v-btn color="blue darken-1" text @click="cancel3">Tidak</v-btn>
           <v-btn color="blue darken-1" text @click="rate">Ya</v-btn>          
         </v-card-actions>
+        <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
+           <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
+        </v-snackbar>
       </v-card>
     </v-dialog>
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
             {{response_message}}
+        </v-snackbar>
+
+        <v-snackbar v-model="snackbar2" :color="color" timeout="2000" bottom>
+            {{error_message}}
         </v-snackbar>
         
     </v-main>
@@ -375,6 +418,7 @@ import moment from 'moment'
                 mobils: [],
                 drivers: [],
                 promos: [],
+                customers: [],
                 menu1: false,
                 absolute:false,
                 pdf:'',
@@ -414,6 +458,9 @@ import moment from 'moment'
                     this.save();
                 }
             },
+            uncheck(){
+                this.form.pilihan_promo = '';
+            },
             setColorStatusPembayaran(status_pembayaran){
                 if(status_pembayaran==='Belum Lunas'){
                     return 'orange'
@@ -428,7 +475,9 @@ import moment from 'moment'
                     return 'blue'
                 }else if(status_transaksi==='Selesai'){
                     return 'green'
-                }else if(status_transaksi==='Batal'){
+                }else if(status_transaksi==='Batal Transaksi'){
+                    return 'red'
+                }else if(status_transaksi==='Verifikasi Ditolak'){
                     return 'red'
                 }
             },
@@ -461,8 +510,41 @@ import moment from 'moment'
                     return 'Tidak Bisa'
                 }
             },
-            cekTipeTransaksi(){
-                var url = this.$api+'/customer/'+localStorage.getItem('id');
+            // cekTipeTransaksi(){
+            //     var url = this.$api+'/customer-profile/'+localStorage.getItem('id');
+            //     this.$http.get(url,{
+            //         headers:{
+            //             'Authorization':'Bearer '+localStorage.getItem('token')
+            //         }
+            //     }).then(response=>{
+            //         this.customers=response.data.data
+            //         console.log(this.customers)
+            //     })
+
+            //     // if(customers.tipe_transaksi===1){
+            //     //     return true
+            //     // }else if(customers.tipe_transaksi===0){
+            //     //     return false
+            //     // }
+            // },
+            // cekVerifikasiCustomer(){
+            //     var url=this.$api+'/customer-profile/'+ localStorage.getItem('id');
+            //     this.$http.get(url,{
+            //         headers:{
+            //             'Authorization':'Bearer '+localStorage.getItem('token')
+            //         }
+            //     }).then(response=>{
+            //         this.customers=response.data.data
+            //     })
+
+            //     // if(customers.tipe_transaksi===null){
+            //     //     return true
+            //     // }else{
+            //     //     return false
+            //     // }
+            // },
+            readCustomer(){
+                 var url=this.$api+'/customer-profile/'+ localStorage.getItem('id');
                 this.$http.get(url,{
                     headers:{
                         'Authorization':'Bearer '+localStorage.getItem('token')
@@ -470,45 +552,25 @@ import moment from 'moment'
                 }).then(response=>{
                     this.customers=response.data.data
                 })
-
-                if(customers.tipe_transaksi===1){
-                    return true
-                }else if(customers.tipe_transaksi===0){
-                    return false
-                }
-            },
-            cekVerifikasiCustomer(){
-                var url=this.$api+'/customer/'+ localStorage.getItem('id');
-                this.$http.get(url,{
-                    headers:{
-                        'Authorization':'Bearer '+localStorage.getItem('token')
-                    }
-                }).then(response=>{
-                    this.customers=response.data.data
-                })
-
-                if(customers.tipe_transaksi===null){
-                    return true
-                }else{
-                    return false
-                }
             },
             print(no_transaksi){
-                 var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'cetak-nota';
+                 var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'/cetak-nota';
+                 console.log(url)
                 this.$http.get(url,{
                     headers:{
                         'Authorization':'Bearer '+localStorage.getItem('token'),
-                        type: 'application/pdf'
-                    }
+                        'Content-Type': 'application/pdf'
+                    },
+                    responseType: 'blob'
+                    
                 }).then(response=>{
-                    const file = new Blob(
-                    [response.data.data], 
-                    {type: 'application/pdf'});
-                    //Build a URL from the file
-                    const fileURL = URL.createObjectURL(file);
-                    //Open the URL on new Window
-                    window.open(fileURL);
-                    this.response_message = response.data.message;
+                     const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute("download", 'notaPembayaran.pdf');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
                 })
             },
             getMobil(){
@@ -568,26 +630,36 @@ import moment from 'moment'
             },
             save(){
 
-                var bukti_pembayaran = document.getElementById('bukti_pembayaran');
+                // var bukti_pembayaran = document.getElementById('bukti_pembayaran');
 
-                if(bukti_pembayaran.files[0]){
-                    this.transaksi.append('bukti_pembayaran',bukti_pembayaran.files[0]);
-                }
+                // if(bukti_pembayaran.files[0]){
+                //     this.transaksi.append('bukti_pembayaran',bukti_pembayaran.files[0]);
+                // }
                 var formatted_tgl_mulai_sewa = moment(this.form.tanggal_mulai_sewa).format( "YYYY-MM-DD")
                 var formatted_jam_mulai_sewa = moment(this.form.jam_mulai_sewa,"hh:mm").format("HH:mm:ss")
                 var formatted_datetime_mulai_sewa = formatted_tgl_mulai_sewa+' '+formatted_jam_mulai_sewa
                 console.log(formatted_datetime_mulai_sewa)
+                if(formatted_jam_mulai_sewa==='Invalid date'){
+                    formatted_datetime_mulai_sewa = ''
+                     this.transaksi.append('tgl_mulai_sewa', formatted_datetime_mulai_sewa);
+                }
 
                 var formatted_tgl_selesai_sewa = moment(this.form.tanggal_selesai_sewa).format( "YYYY-MM-DD")
                 var formatted_jam_selesai_sewa = moment(this.form.jam_selesai_sewa,"hh:mm").format("HH:mm:ss")
                 var formatted_datetime_selesai_sewa = formatted_tgl_selesai_sewa+' '+formatted_jam_selesai_sewa
+                if(formatted_jam_selesai_sewa==='Invalid date'){
+                    formatted_datetime_selesai_sewa = ''
+                    this.transaksi.append('tgl_selesai_sewa', formatted_datetime_selesai_sewa);
+                }
 
-                
+                if(this.form.jenis_transaksi==='2'){
+                    this.form.pilihan_driver = ''
+                }
                 this.transaksi.append('id_customer',localStorage.getItem('id'));
                 this.transaksi.append('id_promo', this.form.pilihan_promo);
                 this.transaksi.append('id_mobil', this.form.pilihan_mobil);
                 this.transaksi.append('id_driver', this.form.pilihan_driver);
-                this.transaksi.append('tgl_mulai_sewa', formatted_datetime_mulai_sewa);
+               this.transaksi.append('tgl_mulai_sewa', formatted_datetime_mulai_sewa);
                 this.transaksi.append('tgl_selesai_sewa', formatted_datetime_selesai_sewa);
                 this.transaksi.append('metode_pembayaran', this.form.metode_pembayaran);
                 this.transaksi.append('rating_driver', this.form.rating_driver);
@@ -652,29 +724,29 @@ import moment from 'moment'
                     this.load = false;
                 });
         },
-        deleteData(){
-            var url = this.$api+'/transaksipenyewaan/'+this.deleteId+'/pembatalan';
-                this.load = true;
-                this.$http.get(url,{
-                    headers: {
-                    'Authorization':'Bearer ' + localStorage.getItem('token'),
-                    }
-                }).then(response => {
-                    this.response_message = response.data.message;
-                    this.color = "green";
-                    this.snackbar1 = true;
-                    this.load = false;
-                    this.close();
-                    this.readData();
-                    this.resetForm();
-                    this.inputType='Tambah';
-                }).catch(error=>{
-                    this.error_message = error.response.data.message;
-                    this.color = "blue";
-                    this.snackbar = true;
-                    this.load = false;
-                });
-        },
+        // deleteData(){
+        //     var url = this.$api+'/transaksipenyewaan/'+this.deleteId+'/pembatalan';
+        //         this.load = true;
+        //         this.$http.get(url,{
+        //             headers: {
+        //             'Authorization':'Bearer ' + localStorage.getItem('token'),
+        //             }
+        //         }).then(response => {
+        //             this.response_message = response.data.message;
+        //             this.color = "green";
+        //             this.snackbar1 = true;
+        //             this.load = false;
+        //             this.close();
+        //             this.readData();
+        //             this.resetForm();
+        //             this.inputType='Tambah';
+        //         }).catch(error=>{
+        //             this.error_message = error.response.data.message;
+        //             this.color = "blue";
+        //             this.snackbar = true;
+        //             this.load = false;
+        //         });
+        // },
         cancel(){
             this.resetForm();
             this.readData();
@@ -769,10 +841,10 @@ import moment from 'moment'
             this.readDatabyId();
             this.detail_transaksi = true;
         },
-        deleteHandler(no_transaksi){
-            this.deleteId = no_transaksi;
-            this.dialogConfirm = true;
-        },
+        // deleteHandler(no_transaksi){
+        //     this.deleteId = no_transaksi;
+        //     this.dialogConfirm = true;
+        // },
         ratingHandler(transaksi){
             this.rateId = transaksi.no_transaksi;
             if(transaksi.id_driver===null){
@@ -798,6 +870,9 @@ import moment from 'moment'
     mounted(){
         this.readData();
         this.readDatabyId();
+        this.readCustomer();
+        // this.cekTipeTransaksi();
+        // this.cekVerifikasiCustomer();
         this.getMobil();
         this.getDriver();
         this.getPromo();

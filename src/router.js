@@ -129,6 +129,12 @@ const router = new VueRouter({
                     name: 'Jadwal Pegawai',
                     meta: {title: 'Jadwal Pegawai'},
                     component: importComponent('Manager/Jadwal'),
+                },
+                {
+                    path: '/rating-ajr',
+                    name: 'Rating AJR',
+                    meta: {title: 'Rating AJR'},
+                    component: importComponent('Manager/RatingPerusahaan'),
                 }
             ]
         },

@@ -36,13 +36,13 @@
             >{{setStatus(pegawais.status_aktif)}}</v-chip>
       </v-card-text>
     <v-card-actions>
-       <v-btn color="primary" dark @click="editHandler(pegawais)" > Edit Profil
-        </v-btn>
+       <!-- <v-btn color="primary" dark @click="editHandler(pegawais)" > Edit Profil
+        </v-btn> -->
     </v-card-actions>
   </v-card>
    </v-container>
 
-  <v-dialog v-model="dialog" persistent max-width="600px">
+  <!-- <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="headline"> Edit Profil Pegawai </span>
@@ -84,7 +84,7 @@
           <v-btn color="blue darken-1" text @click="update">Simpan</v-btn>          
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
    <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
     {{error_message}}
@@ -123,7 +123,7 @@ export default{
     },
     methods: {
     readData(){
-            var url=this.$api+'/pegawai/7' //+ localStorage.getItem('id')
+            var url=this.$api+'/pegawai/' + localStorage.getItem('id')
             this.$http.get(url,{
                 headers:{
                     'Authorization':'Bearer '+localStorage.getItem('token')

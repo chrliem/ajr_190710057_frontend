@@ -29,7 +29,7 @@
             <div class="text-left"><strong>Jenis Kelamin </strong>   : {{pegawais.jenis_kelamin_pegawai}}</div>
             <div class="text-left"><strong>Alamat        </strong>   : {{pegawais.alamat_pegawai}}</div>
             <div class="text-left"><strong>No Telepon    </strong>   : {{pegawais.no_telepon_pegawai}}</div>
-            <div class="text-left"><strong>Alamat email  </strong>   : {{pegawais.email_pegawai}}</div>
+            <div class="text-left"><strong>Alamat email  </strong>   : {{pegawais.email}}</div>
             <v-chip
                 v-bind:class="setColorStatus(pegawais.status_aktif)"
                 class="rounded pa-1 text-center text-wrap"
@@ -123,7 +123,7 @@ export default{
     },
     methods: {
     readData(){
-            var url=this.$api+'/pegawai/7' //+ localStorage.getItem('id')
+            var url=this.$api+'/pegawai/' + localStorage.getItem('id')
             this.$http.get(url,{
                 headers:{
                     'Authorization':'Bearer '+localStorage.getItem('token')
