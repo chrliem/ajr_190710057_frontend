@@ -234,7 +234,12 @@
                 <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran}}</div>
             </span>
             <v-divider></v-divider><br>
-            <div class="text-left"><strong>Metode Pembayaran  </strong>   : {{transaksi1.metode_pembayaran}}</div>
+            <span v-if="transaksi1.metode_pembayaran==='null'">
+                <div class="text-left"><strong>Metode Pembayaran  </strong>   : Belum melakukan pembayaran</div>
+            </span>
+            <span v-else>
+                <div class="text-left"><strong>Metode Pembayaran  </strong>   : {{transaksi1.metode_pembayaran}}</div>
+            </span>
             <div class="text-left"><strong>Status Pembayaran  </strong>   :</div>
             <div 
                 v-bind:class="setColorStatusPembayaran(transaksi1.status_pembayaran)"
@@ -340,8 +345,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancel2">Tidak</v-btn>
-          <v-btn color="blue darken-1" text @click="rate">Ya</v-btn>          
+          <v-btn color="blue darken-1" text @click="cancel2">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="rate">Tambah</v-btn>          
         </v-card-actions>
 
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
@@ -365,8 +370,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancel3">Tidak</v-btn>
-          <v-btn color="blue darken-1" text @click="rate">Ya</v-btn>          
+          <v-btn color="blue darken-1" text @click="cancel3">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="rate">Tambah</v-btn>          
         </v-card-actions>
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
            <div v-for="(errorArray, index) in error_message" :key="index">

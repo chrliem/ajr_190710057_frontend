@@ -40,11 +40,11 @@
         <v-card-text>
           <v-container>
             <v-text-field v-model="form.no_customer" label="Nomor Customer" disabled> </v-text-field>
-            <v-radio-group  v-model="form.jenis_transaksi" label="Jenis Transaksi" required>
+            <v-radio-group disabled v-model="form.jenis_transaksi" label="Jenis Transaksi" required>
               <v-radio value="1" label="Sewa Mobil dengan Driver"></v-radio>
               <v-radio value="2" label="Sewa Mobil"></v-radio>
             </v-radio-group>
-            <v-radio-group v-show="form.jenis_transaksi!==''" v-model="form.pilihan_mobil" label="Pilihan Mobil Tersedia" required>
+            <v-radio-group v-show="form.jenis_transaksi!==''" v-model="form.pilihan_mobil" label="Pilihan Mobil" required>
           <v-radio v-for="mobil in mobils"  :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
                     <template v-slot:label>
                         <v-card width="300px" color="white">
@@ -71,7 +71,7 @@
                     </template>
                 </v-radio>    
             </v-radio-group>
-             <v-radio-group  v-show="form.jenis_transaksi==='1'" v-model="form.pilihan_driver" label="Pilihan Driver Tersedia" required>
+             <v-radio-group  v-show="form.jenis_transaksi==='1'" v-model="form.pilihan_driver" label="Pilihan Driver " required>
                 <v-radio v-for="driver in drivers"  :label="driver.nama_driver " :key="driver.id_driver" :value="driver.id_driver">
                     <template v-slot:label>
                         <v-card width="300px" color="white">
@@ -218,7 +218,12 @@
             </span>
             
             <v-divider></v-divider><br>
-            <div class="text-left"><strong>Metode Pembayaran  </strong>   : {{transaksi1.metode_pembayaran}}</div>
+            <span v-if="transaksi1.metode_pembayaran==='null'">
+                <div class="text-left"><strong>Metode Pembayaran  </strong>   : Belum melakukan pembayaran</div>
+            </span>
+            <span v-else>
+                <div class="text-left"><strong>Metode Pembayaran  </strong>   : {{transaksi1.metode_pembayaran}}</div>
+            </span>
             <div class="text-left"><strong>Status Pembayaran  </strong>   :</div>
             <div 
                 v-bind:class="setColorStatusPembayaran(transaksi1.status_pembayaran)"
@@ -359,11 +364,7 @@
           <v-btn color="blue darken-1" text @click="verify">Lanjut</v-btn>          
         </v-card-actions>
          <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-           <div v-for="(errorArray, index) in error_message" :key="index">
-                <div v-for="(error_message,  index) in errorArray" :key="index">
                     {{error_message}}
-                </div>
-            </div>
         </v-snackbar>
       </v-card>
     </v-dialog>
@@ -721,7 +722,7 @@ export default{
             this.dialogConfirm = false;
         },
         cancel4(){
-            this.resetForm();
+            // this.resetForm();
             this.readData();
             this.dialogConfirm1 = false;
         },

@@ -26,7 +26,7 @@
               <div class="text-left"><strong>No SIM  </strong>    : Belum ada</div>
             </div>
             <div v-else class="text-left"><strong>No SIM   </strong>   : {{customers.no_sim_customer}}</div>
-            <div class="text-left"><strong>Alamat Email </strong>   : {{customers.email_customer}}</div>
+            <div class="text-left"><strong>Alamat Email </strong>   : {{customers.email}}</div>
             <strong>Tipe Transaksi: </strong>
             <div>
             <v-chip
