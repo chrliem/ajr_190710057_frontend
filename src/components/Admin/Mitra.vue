@@ -152,7 +152,7 @@ export default({
             this.load = true;
             this.$http.post(url, this.mitra, {
                 headers: {
-                'Authorization':'Bearer' + localStorage.getItem('token'),
+                'Authorization':'Bearer ' + localStorage.getItem('token'),
                 }
             }).then(response => {
                 this.response_message = response.data.message;
@@ -179,7 +179,7 @@ export default({
                 this.load = true;
                 this.$http.post(url, this.mitra, {
                     headers: {
-                    'Authorization':'Bearer' + localStorage.getItem('token'),
+                    'Authorization':'Bearer ' + localStorage.getItem('token'),
                     }
                 }).then(response => {
                     this.response_message = response.data.message;
@@ -200,9 +200,9 @@ export default({
         deleteData(){
             var url = this.$api+'/mitra/'+this.deleteId+'/delete';
             this.load = true;
-            this.$http.put(url,{
+            this.$http.get(url,{
                 headers: {
-                'Authorization':'Bearer' + localStorage.getItem('token'),
+                'Authorization':'Bearer ' + localStorage.getItem('token'),
                 }
             }).then(response => {
                 this.response_message = response.data.message;

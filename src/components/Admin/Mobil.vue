@@ -486,7 +486,7 @@ export default {
         deleteData(){
             var url = this.$api+'/mobil/'+this.deleteId+'/delete';
             this.load = true;
-            this.$http.put(url,{
+            this.$http.get(url,{
                 headers: {
                 'Authorization':'Bearer ' + localStorage.getItem('token'),
                 }

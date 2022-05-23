@@ -148,7 +148,7 @@ export default({
             this.load = true;
             this.$http.post(url, this.jadwal, {
                 headers: {
-                'Authorization':'Bearer' + localStorage.getItem('token'),
+                'Authorization':'Bearer ' + localStorage.getItem('token'),
                 }
             }).then(response => {
                 this.response_message = response.data.message;
@@ -176,7 +176,7 @@ export default({
                 this.load = true;
                 this.$http.post(url, this.jadwal, {
                     headers: {
-                    'Authorization':'Bearer' + localStorage.getItem('token'),
+                    'Authorization':'Bearer ' + localStorage.getItem('token'),
                     }
                 }).then(response => {
                     this.response_message = response.data.message;
@@ -199,7 +199,7 @@ export default({
             this.load = true;
             this.$http.delete(url,{
                 headers: {
-                'Authorization':'Bearer' + localStorage.getItem('token'),
+                'Authorization':'Bearer ' + localStorage.getItem('token'),
                 }
             }).then(response => {
                 this.response_message = response.data.message;

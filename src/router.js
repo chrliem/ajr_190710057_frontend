@@ -158,13 +158,37 @@ router.beforeEach((to,from,next)=>{
 
 router.beforeEach((to,from,next)=>{
     document.title=to.meta.title
+    if (to.name === 'Main' && localStorage.getItem('role')==='Manager' && localStorage.getItem('token')!==null) next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Main' && localStorage.getItem('role')==='Customer Service' && localStorage.getItem('token')!==null) next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Main' && localStorage.getItem('role')==='Admin' && localStorage.getItem('token')!==null) next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
+    if (to.name === 'Main' && localStorage.getItem('role')==='Customer' && localStorage.getItem('token')!==null) next({ name: localStorage.getItem('role')})
+    else next()
+})
+
+router.beforeEach((to,from,next)=>{
+    document.title=to.meta.title
     if (to.name === 'Customer Service' && localStorage.getItem('role')!=='Customer Service') next({ name: localStorage.getItem('role')})
     else next()
 })
 
 router.beforeEach((to,from,next)=>{
     document.title=to.meta.title
-    if (to.name === 'Admin' && localStorage.getItem('role')!=='Admin') next({ name: localStorage.getItem('role')})
+    if (to.name === 'Admin'  && localStorage.getItem('role')!=='Admin') next({ name: localStorage.getItem('role')})
     else next()
 })
 
