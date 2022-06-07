@@ -32,122 +32,115 @@
             </v-card>
         </v-container>
 
-         <v-dialog v-model="dialog" persistent max-width="800px">
-        <v-card>
-            <v-card-title>
-            <span class="headline"> Ubah Transaksi </span>
-            </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-text-field v-model="form.no_customer" label="Nomor Customer" disabled> </v-text-field>
-            <v-radio-group disabled v-model="form.jenis_transaksi" label="Jenis Transaksi" required>
-              <v-radio value="1" label="Sewa Mobil dengan Driver"></v-radio>
-              <v-radio value="2" label="Sewa Mobil"></v-radio>
-            </v-radio-group>
-            <v-radio-group v-show="form.jenis_transaksi!==''" v-model="form.pilihan_mobil" label="Pilihan Mobil" required>
-          <v-radio v-for="mobil in mobils"  :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
-                    <template v-slot:label>
-                        <v-card width="300px" color="white">
-                            <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil"></v-img>
-                            <v-divider></v-divider>
-                            <v-card-text>
-                            <div class="text-left"><strong>Nama Mobil</strong> : {{mobil.nama_mobil}}</div>
-                            <div class="text-left"><strong>Tipe Mobil</strong> : {{mobil.tipe_mobil}}</div>
-                            <div class="text-left"><strong>Warna Mobil</strong> : {{mobil.warna_mobil}}</div>
-                            <div class="text-left"><strong>Jenis Transmisi </strong>   : {{mobil.jenis_transmisi}}</div>
-                            <div class="text-left"><strong>Jenis Bahan Bakar </strong>   : {{mobil.jenis_bahan_bakar}}</div>
-                            <div class="text-left"><strong>Volume Bahan Bakar </strong>   : {{mobil.volume_bahan_bakar}} Liter</div>
-                            <div class="text-left"><strong>Kapasitas Penumpang </strong>   : {{mobil.kapasitas_penumpang}} orang</div>
-                            <div class="text-left"><strong>Fasilitas Mobil </strong>   : {{mobil.fasilitas_mobil}}</div>
-                            <div class="text-left"><strong>Tarif Harian </strong>   : Rp {{mobil.tarif_mobil_harian}}</div>
-                            <span v-if="mobil.status_ketersediaan_mobil===1">
-                                <div class="text-left"><strong>Status Ketersediaan </strong>   : Tersedia</div>
-                            </span>
-                            <span v-else-if="mobil.status_ketersediaan_mobil===0">
-                                <div class="text-left"><strong>Status Ketersediaan </strong>   : Tidak Tersedia</div>
-                            </span>
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                </v-radio>    
-            </v-radio-group>
-             <v-radio-group  v-show="form.jenis_transaksi==='1'" v-model="form.pilihan_driver" label="Pilihan Driver " required>
-                <v-radio v-for="driver in drivers"  :label="driver.nama_driver " :key="driver.id_driver" :value="driver.id_driver">
-                    <template v-slot:label>
-                        <v-card width="300px" color="white">
-                            <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver"></v-img>
-                            <v-divider></v-divider>
-                            <v-card-text>
-                            <div class="text-left"><strong>Nama Driver </strong>   : {{driver.nama_driver}}</div>
-                            <div class="text-left"><strong>Jenis Kelamin </strong>   : {{driver.jenis_kelamin_driver}}</div>
-                            <div class="text-left"><strong>Tarif harian </strong>   : Rp {{driver.tarif_driver_harian}}</div>
-                            <div class="text-left"><strong>Kemampuan Bahasa Asing </strong>   : {{setKemampuanBahasa(driver.kemampuan_bahasa_asing)}}</div>
-                            <span v-if="driver.status_ketersediaan_driver===1">
-                                <div class="text-left"><strong>Status Ketersediaan </strong>   : Tersedia</div>
-                            </span>
-                            <span v-else-if="driver.status_ketersediaan_driver===0">
-                                <div class="text-left"><strong>Status Ketersediaan </strong>   : Tidak Tersedia</div>
-                            </span>
-                            
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                </v-radio>
-            </v-radio-group>
-            <div>Mulai Sewa</div>   
-            <v-row>
-                <v-col cols="12" lg="6">
-                    <v-text-field  :min="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)" type="date" v-model="form.tanggal_mulai_sewa" label="Tanggal Mulai Sewa" required></v-text-field>
-                </v-col>
-                <v-col cols="12" lg="6">
-                    <v-text-field type="time" v-model="form.jam_mulai_sewa" label="Jam Mulai Sewa" required></v-text-field>
-                </v-col>
-            </v-row>
-            <div>Selesai Sewa</div>   
-            <v-row>
-                <v-col cols="12" lg="6">
-                    <v-text-field  :min="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)" type="date" v-model="form.tanggal_selesai_sewa" label="Tanggal Selesai Sewa" required></v-text-field>
-                </v-col>
-                <v-col cols="12" lg="6">
-                    <v-text-field  type="time" v-model="form.jam_selesai_sewa" label="Jam Selesai Sewa" required></v-text-field>
-                </v-col>
-            </v-row>
-            <v-radio-group  v-model="form.pilihan_promo" label="Pilihan Promo" required>
-                <v-radio :checked="isChecked" v-for="promo in promos" v-show="promo.status_promo===1" :label="promo.kode_promo" :key="promo.id_promo" :value="promo.id_promo">
-                <template v-slot:label>
-                        <v-card width="300px" color="white">
-                            <v-divider></v-divider>
-                            <v-card-text>
-                            <div class="text-left"><strong>Kode Promo </strong>   : {{promo.kode_promo}}</div>
-                            <div class="text-left"><strong>Keterangan </strong>   : {{promo.keterangan}}</div>
-                            <div class="text-left"><strong>Potongan Promo </strong>   : {{promo.potongan_promo*100}} %</div> 
-                            </v-card-text>
-                        </v-card>
-                    </template> 
-                </v-radio>
-                <v-btn small text @click="uncheck">Batal Pilihan Promo</v-btn>
-            </v-radio-group>
-            <!-- <v-radio-group  v-model="form.metode_pembayaran" label="Metode Pembayaran" disabled required>
-              <v-radio value="Tunai" label="Tunai"></v-radio>
-              <v-radio value="Transfer" label="Transfer"></v-radio>
-            </v-radio-group>         -->
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
-          <v-btn color="blue darken-1" text @click="dialogConfirm=true">Simpan</v-btn>          
-        </v-card-actions>
-        <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-            <!-- <div v-for="(errorArray, index) in error_message" :key="index"> -->
-                <!-- <div v-for="(error_message,  index) in errorArray" :key="index"> -->
-                    {{error_message}}
-                <!-- </div> -->
-            <!-- </div> -->
-        </v-snackbar>
-        
-      </v-card>
-    </v-dialog>
+        <v-dialog v-model="dialog" persistent max-width="800px">
+            <v-card>
+                <v-card-title>
+                <span class="headline"> Ubah Transaksi </span>
+                </v-card-title>
+            <v-card-text>
+            <v-container>
+                <v-text-field v-model="form.no_customer" label="Nomor Customer" disabled> </v-text-field>
+                <v-radio-group disabled v-model="form.jenis_transaksi" label="Jenis Transaksi" required>
+                <v-radio value="1" label="Sewa Mobil dengan Driver"></v-radio>
+                <v-radio value="2" label="Sewa Mobil"></v-radio>
+                </v-radio-group>
+                <v-radio-group v-show="form.jenis_transaksi!==''" v-model="form.pilihan_mobil" label="Pilihan Mobil" required>
+                <v-radio v-for="mobil in mobils"  :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
+                        <template v-slot:label>
+                            <v-card width="300px" color="white">
+                                <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil"></v-img>
+                                <v-divider></v-divider>
+                                <v-card-text>
+                                <div class="text-left"><strong>Nama Mobil</strong> : {{mobil.nama_mobil}}</div>
+                                <div class="text-left"><strong>Tipe Mobil</strong> : {{mobil.tipe_mobil}}</div>
+                                <div class="text-left"><strong>Warna Mobil</strong> : {{mobil.warna_mobil}}</div>
+                                <div class="text-left"><strong>Jenis Transmisi </strong>   : {{mobil.jenis_transmisi}}</div>
+                                <div class="text-left"><strong>Jenis Bahan Bakar </strong>   : {{mobil.jenis_bahan_bakar}}</div>
+                                <div class="text-left"><strong>Volume Bahan Bakar </strong>   : {{mobil.volume_bahan_bakar}} Liter</div>
+                                <div class="text-left"><strong>Kapasitas Penumpang </strong>   : {{mobil.kapasitas_penumpang}} orang</div>
+                                <div class="text-left"><strong>Fasilitas Mobil </strong>   : {{mobil.fasilitas_mobil}}</div>
+                                <div class="text-left"><strong>Tarif Harian </strong>   : Rp {{mobil.tarif_mobil_harian}}</div>
+                                <span v-if="mobil.status_ketersediaan_mobil===1">
+                                    <div class="text-left"><strong>Status Ketersediaan </strong>   : Tersedia</div>
+                                </span>
+                                <span v-else-if="mobil.status_ketersediaan_mobil===0">
+                                    <div class="text-left"><strong>Status Ketersediaan </strong>   : Tidak Tersedia</div>
+                                </span>
+                                </v-card-text>
+                            </v-card>
+                        </template>
+                    </v-radio>    
+                    </v-radio-group>
+                    <v-radio-group  v-show="form.jenis_transaksi==='1'" v-model="form.pilihan_driver" label="Pilihan Driver " required>
+                    <v-radio v-for="driver in drivers"  :label="driver.nama_driver " :key="driver.id_driver" :value="driver.id_driver">
+                        <template v-slot:label>
+                            <v-card width="300px" color="white">
+                                <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver"></v-img>
+                                <v-divider></v-divider>
+                                <v-card-text>
+                                <div class="text-left"><strong>Nama Driver </strong>   : {{driver.nama_driver}}</div>
+                                <div class="text-left"><strong>Jenis Kelamin </strong>   : {{driver.jenis_kelamin_driver}}</div>
+                                <div class="text-left"><strong>Tarif harian </strong>   : Rp {{driver.tarif_driver_harian}}</div>
+                                <div class="text-left"><strong>Kemampuan Bahasa Asing </strong>   : {{setKemampuanBahasa(driver.kemampuan_bahasa_asing)}}</div>
+                                <span v-if="driver.status_ketersediaan_driver===1">
+                                    <div class="text-left"><strong>Status Ketersediaan </strong>   : Tersedia</div>
+                                </span>
+                                <span v-else-if="driver.status_ketersediaan_driver===0">
+                                    <div class="text-left"><strong>Status Ketersediaan </strong>   : Tidak Tersedia</div>
+                                </span>
+                                
+                                </v-card-text>
+                            </v-card>
+                        </template>
+                    </v-radio>
+                    </v-radio-group>
+                    <div>Mulai Sewa</div>   
+                    <v-row>
+                        <v-col cols="12" lg="6">
+                            <v-text-field  :min="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)" type="date" v-model="form.tanggal_mulai_sewa" label="Tanggal Mulai Sewa" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" lg="6">
+                            <v-text-field type="time" v-model="form.jam_mulai_sewa" label="Jam Mulai Sewa" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <div>Selesai Sewa</div>   
+                    <v-row>
+                        <v-col cols="12" lg="6">
+                            <v-text-field  :min="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)" type="date" v-model="form.tanggal_selesai_sewa" label="Tanggal Selesai Sewa" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" lg="6">
+                            <v-text-field  type="time" v-model="form.jam_selesai_sewa" label="Jam Selesai Sewa" required></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-radio-group  v-model="form.pilihan_promo" label="Pilihan Promo" required>
+                        <v-radio :checked="isChecked" v-for="promo in promos" v-show="promo.status_promo===1" :label="promo.kode_promo" :key="promo.id_promo" :value="promo.id_promo">
+                        <template v-slot:label>
+                                <v-card width="300px" color="white">
+                                    <v-divider></v-divider>
+                                    <v-card-text>
+                                    <div class="text-left"><strong>Kode Promo </strong>   : {{promo.kode_promo}}</div>
+                                    <div class="text-left"><strong>Keterangan </strong>   : {{promo.keterangan}}</div>
+                                    <div class="text-left"><strong>Potongan Promo </strong>   : {{promo.potongan_promo*100}} %</div> 
+                                    </v-card-text>
+                                </v-card>
+                            </template> 
+                        </v-radio>
+                        <v-btn small text @click="uncheck">Batal Pilihan Promo</v-btn>
+                    </v-radio-group>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+            <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
+                <v-btn color="blue darken-1" text @click="dialogConfirm=true">Simpan</v-btn>          
+            </v-card-actions>
+
+            <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
+                {{error_message}}
+            </v-snackbar>
+            
+            </v-card>
+        </v-dialog>
 
           <v-dialog v-model="detail_transaksi" persistent max-width="800px">
             <v-card max-width="800px">
@@ -244,18 +237,7 @@
                 <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
-                </v-card-text>
-            <!-- <v-img
-                v-show="transaksi1.bukti_pembayaran!==null"
-                :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"
-                height="200px"
-                width="200px"
-                @click="overlay=!overlay"
-            ></v-img>
-            <v-overlay :absolute="absolute" :value="overlay">
-                <v-img width="550px" height="550px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
-             <v-btn color="success" @click="overlay = false">Close</v-btn>
-          </v-overlay> -->
+        </v-card-text>
           <br><v-divider></v-divider><br>
           <v-card-text>
               <v-card-actions class="justify-center">
@@ -264,8 +246,7 @@
                 <v-btn :disabled="transaksi1.status_transaksi!=='Menunggu Verifikasi'" color="error" @click="deleteHandler(transaksi1.no_transaksi)">Pembatalan</v-btn>
           </v-card-actions>
           </v-card-text>
-          
-            </v-card>
+        </v-card>
         </v-dialog>
 
         <v-dialog v-model="dialogVerifikasi" persistent max-width="600px">
@@ -281,7 +262,6 @@
               <v-radio value="Verifikasi Ditolak" label="Verifikasi Ditolak"></v-radio>
               <v-radio value="Sedang Berjalan" label="Sedang Berjalan"></v-radio>
               <v-radio value="Selesai" label="Selesai"></v-radio>
-              <!-- <v-radio value="Batal" label="Batal"></v-radio> -->
         </v-radio-group>
         <v-radio-group v-model="form.status_pembayaran" label="Status Pembayaran" required>
               <v-radio value="Belum Lunas" label="Belum Lunas"></v-radio>
@@ -291,7 +271,6 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!-- kurang radio button status transkasi, pembayaran, nampilin bukti pembayaran -->
           <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="dialogConfirm1=true">Verifikasi</v-btn>          
         </v-card-actions>
@@ -343,11 +322,7 @@
           <v-btn color="blue darken-1" text @click="setForm">Lanjut</v-btn>          
         </v-card-actions>
          <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-           <!-- <div v-for="(errorArray, index) in error_message" :key="index"> -->
-                <!-- <div v-for="(error_message,  index) in errorArray" :key="index"> -->
-                    {{error_message}}
-                <!-- </div> -->
-            <!-- </div> -->
+            {{error_message}}
         </v-snackbar>
       </v-card>
     </v-dialog>
@@ -364,7 +339,7 @@
           <v-btn color="blue darken-1" text @click="verify">Lanjut</v-btn>          
         </v-card-actions>
          <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
-                    {{error_message}}
+            {{error_message}}
         </v-snackbar>
       </v-card>
     </v-dialog>
@@ -533,22 +508,6 @@ export default{
                     return 'Tidak Bisa'
                 }
             },
-            // cekTipeTransaksi(no_customer){
-            //     var url = this.$api+'/customer-profile/'+no_customer;
-            //     this.$http.get(url,{
-            //         headers:{
-            //             'Authorization':'Bearer '+localStorage.getItem('token')
-            //         }
-            //     }).then(response=>{
-            //         this.customers=response.data.data
-            //     })
-
-            //     if(this.customers.tipe_sewa_customer===1){
-            //         return true
-            //     }else{
-            //         return false
-            //     }
-            // },
             getMobil(){
                 var url=this.$api+'/mobil/';
                 this.$http.get(url,{

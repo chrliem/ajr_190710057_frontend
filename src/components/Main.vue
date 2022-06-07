@@ -61,13 +61,13 @@
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="save">Regsiter</v-btn>          
         </v-card-actions>
-        <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
+        <!-- <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
             <div v-for="(errorArray, index) in error_message" :key="index">
                 <div v-for="(error_message,  index) in errorArray" :key="index">
                     {{error_message}}
                 </div>
             </div>
-        </v-snackbar>
+        </v-snackbar> -->
       </v-card>
     </v-dialog>
 
@@ -87,24 +87,39 @@
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="login">Login</v-btn>          
         </v-card-actions>
-        <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
+        <!-- <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
+            <div v-for="(errorArray, index) in error_message" :key="index">
+                <div v-for="(error_message,  index) in errorArray" :key="index">
+                    {{error_message}}
+                </div>
+            </div>
+        </v-snackbar> -->
+      </v-card>
+    </v-dialog>
+
+     <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
             <div v-for="(errorArray, index) in error_message" :key="index">
                 <div v-for="(error_message,  index) in errorArray" :key="index">
                     {{error_message}}
                 </div>
             </div>
         </v-snackbar>
-      </v-card>
-    </v-dialog>
-<router-view></router-view>
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
       {{response_message}}
     </v-snackbar>
+    <v-snackbar v-model="snackbar2" :color="color" timeout="2000" top>
+
+                    {{error_message}}
+        </v-snackbar>
+<router-view></router-view>
+     
   </div>
 </template>
 
 <script>
 export default{
+  /* eslint-disable */ 
+
     name: "Main",
     data() {
         return{
@@ -116,6 +131,7 @@ export default{
             color: '',
             snackbar:false,
             snackbar1: false,
+            snackbar2: false,
             customer: new FormData,
             form: {
                 nama_customer: '',
@@ -171,6 +187,7 @@ export default{
                     location.reload();
                 }).catch(error=>{
                     this.error_message = error.response.data.message;
+                    console.log("Register",error.response.data.message)
                     this.color = "blue";
                     this.snackbar = true;
                     this.load = false;
@@ -252,10 +269,18 @@ export default{
               
             }).catch(error =>{
                 this.error_message = error.response.data.message;
-                this.color = 'red'
-                this.snackbar - true;
-                localStorage.removeItem('token')
-                this.load = false
+                if(error.response.data.message==='User Not Found' || error.response.data.message==='Incorrect Password'){
+                  this.snackbar2=true;
+                  this.color = "blue";
+                  this.load = false;
+                  localStorage.removeItem('token')
+                }else{
+                  this.color = "blue";
+                  this.snackbar = true;
+                  this.load = false;
+                  localStorage.removeItem('token')
+                }
+                
             })
         },
         close(){

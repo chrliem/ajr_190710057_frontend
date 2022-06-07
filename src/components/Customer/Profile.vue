@@ -93,12 +93,6 @@
             <v-text-field v-model="form.no_telepon_customer" label="No Telepon Customer" required></v-text-field>
             <v-text-field v-model="form.no_kartu_identitas_customer" label="No Kartu Identitas" required></v-text-field>
             <v-text-field v-model="form.no_sim_customer" label="No SIM"></v-text-field>
-            <v-text-field v-model="form.email_customer" label="Email Customer" required></v-text-field>
-            <!-- <v-text-field 
-                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show1 ? 'text' : 'password'"
-                @click:append="show1 = !show1"
-                v-model="form.password_customer" label="Password Customer" required></v-text-field> -->
             <v-file-input
                 id="kartu_identitas"
                 enctype="multipart/form-data"
@@ -120,7 +114,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
-          <v-btn color="blue darken-1" text @click="update">Simpan</v-btn>          
+          <v-btn color="blue darken-1" text @click="dialogConfirm=true">Simpan</v-btn>          
         </v-card-actions>
         <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
             <div v-for="(errorArray, index) in error_message" :key="index">
@@ -129,6 +123,20 @@
                 </div>
             </div>
         </v-snackbar>
+      </v-card>
+    </v-dialog>
+
+   <v-dialog v-model="dialogConfirm" persistent max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Warning!</span>
+        </v-card-title>
+        <v-card-text>Anda yakin ingin mengubah data customer ini?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="update">Konfirmasi</v-btn>          
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
@@ -158,6 +166,7 @@ export default{
             overlay1: false,
             overlay: false,
             customer: new FormData,
+            dialogConfirm: false,
             form: {
                 nama_customer: '',
                 alamat_customer: '',
@@ -235,6 +244,7 @@ export default{
                     this.color = "green";
                     this.snackbar1 = true;
                     this.load = false;
+                    this.dialogConfirm = false;
                     this.close();
                     this.readData();
                     this.resetForm();
@@ -245,7 +255,7 @@ export default{
                     this.load = false;
                 });
     },
-    close(){
+        close(){
                 this.dialog = false;
         },
         resetForm(){
@@ -263,8 +273,11 @@ export default{
             }
         },
         cancel(){
-                this.resetForm();
-                this.dialog = false;
+          this.resetForm();
+          this.dialog = false;
+        },
+        cancel1(){
+          this.dialogConfirm = false;
         },
         editHandler(customers){
             this.editId = customers.id_customer;

@@ -85,6 +85,20 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="dialogConfirm1" persistent max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Warning!</span>
+        </v-card-title>
+        <v-card-text>Anda yakin ingin mengubah data penjadwalan ini?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="update">Konfirmasi</v-btn>          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
       {{response_message}}
     </v-snackbar>
@@ -107,12 +121,11 @@ export default({
             search: null,
             dialog: false,
             dialogConfirm: false,
+            dialogConfirm1: false,
             headers: [
                 {text: "Hari", value: "hari"},
                 {text: "Shift", value: "shift"},
-                
                 {text: "Nama Pegawai", value: "nama_pegawai"},
-                
                 {text: "Actions", value: "actions"}
             ],
             detailjadwal: new FormData,
@@ -130,7 +143,7 @@ export default({
     methods:{
         setForm(){
             if(this.inputType !== 'Tambah'){
-                this.update();
+                this.dialogConfirm1 = true;
             }else{
                 this.save();
             }
@@ -204,8 +217,9 @@ export default({
                 }).then(response => {
                     this.response_message = response.data.message;
                     this.color = "green";
-                    this.snackbar = true;
+                    this.snackbar1 = true;
                     this.load = false;
+                    this.dialogConfirm1 = false;
                     this.close();
                     this.readData();
                     this.resetForm();
@@ -247,6 +261,9 @@ export default({
             this.dialogConfirm = false;
             this.inputType = 'Tambah'
             },
+        cancel1(){
+            this.dialogConfirm1 = false;
+        },
         resetForm(){
             this.form = {
                 id_pegawai: '',

@@ -148,6 +148,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="dialogConfirm1" persistent max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Warning!</span>
+        </v-card-title>
+        <v-card-text>Anda yakin ingin mengubah data pegawai ini?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="update">Konfirmasi</v-btn>          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
         {{response_message}}
         </v-snackbar> 
@@ -172,6 +186,7 @@
                 search: null,
                 dialog: false,
                 dialogConfirm: false,
+                dialogConfirm1: false,
                 detail_pegawai: false,
                 response_message: '',
                 overlay: false,
@@ -204,7 +219,7 @@
         methods:{
             setForm(){
                 if(this.inputType !== 'Tambah'){
-                    this.update();
+                    this.dialogConfirm1 = true;
                 }else{
                     this.save();
                 }
@@ -331,6 +346,7 @@
                     this.color = "green";
                     this.snackbar1 = true;
                     this.load = false;
+                    this.dialogConfirm1 = false;
                     this.close();
                     this.readData();
                     this.resetForm();
@@ -373,9 +389,10 @@
                 this.dialogConfirm = false;
                 this.inputType = 'Tambah'
                 location.reload();
-                // this.$refs.foto_pegawai.$el.value = null;
-                // this.$refs.form.reset();
-                },
+            },
+            cancel1(){
+                this.dialogConfirm1 = false;
+            },
             resetForm(){
                 this.form = {
                     nama_pegawai: '',
@@ -388,10 +405,7 @@
                     password_pegawai: '',
                     foto_pegawai: '',
                 },
-                location.reload();
-                // this.$refs.foto_pegawai.$el.value = null;
-                // this.$refs.form.reset();
-                
+                location.reload();                
             },
             editHandler(item){
                 this.inputType = 'Ubah';

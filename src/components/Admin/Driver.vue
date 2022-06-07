@@ -104,7 +104,7 @@
             <v-overlay :absolute="absolute" :value="overlay">
                 <v-img height="550px" width="550px" :src="$baseURL+'/storage/foto_driver/'+driver1.foto_driver"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
-          </v-overlay>
+            </v-overlay>
             <div class="text-left"><strong>Nama Driver </strong>   : {{driver1.nama_driver}}</div>
             <div class="text-left"><strong>Alamat        </strong>   : {{driver1.alamat_driver}}</div>
             <div class="text-left"><strong>Tanggal Lahir </strong>   : {{driver1.tgl_lahir_driver}}</div>
@@ -299,6 +299,20 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="dialogConfirm1" persistent max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Warning!</span>
+        </v-card-title>
+        <v-card-text>Anda yakin ingin mengubah data driver ini?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="update">Konfirmasi</v-btn>          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
       {{response_message}}
     </v-snackbar>
@@ -323,6 +337,7 @@ export default {
                 search: null,
                 dialog: false,
                 dialogConfirm: false,
+                dialogConfirm1: false,
                 detail_driver: false,
                 response_message: '',
                 overlay: false,
@@ -335,22 +350,10 @@ export default {
                     {text: "Foto", value:"foto_driver"},
                     {text: "ID Driver", value: "id_driver"},
                     {text: "Nama Driver", value: "nama_driver"},
-                    // {text: "Alamat", value: "alamat_driver"},
-                    // {text: "Tanggal Lahir", value: "tgl_lahir_driver"},
-                    // {text: "Jenis Kelamin", value: "jenis_kelamin_driver"},
-                    // {text: "No Telepon", value: "no_telepon_driver"},
-                    // {text: "Email", value:"email_driver"},
-                    // {text: "Tarif Harian", value: "tarif_driver_harian", align: "center"},
                     {text: "Rerata Rating", value:"rerata_rating",  align:"center"},
                     {text: "Status Aktif", value: "status_aktif", align: "center"},
                     {text: "Status Ketersediaan", value: "status_ketersediaan_driver", align: "center"},
                     {text: "Kemampuan Bahasa Asing", value: "kemampuan_bahasa_asing", align: "center"},
-                    // {text: "No SIM", value: "no_sim_driver", align: "center"},
-                    // {text: "SIM", value: "sim_driver", align: "center"},
-                    // {text: "Surat Bebas NAPZA", value: "surat_bebas_napza", align: "center"},
-                    // {text: "Surat Sehat Jiwa", value: "surat_kesehatan_jiwa", align: "center"},
-                    // {text: "Surat Sehat Jasmani", value: "surat_kesehatan_jasmani", align: "center"},
-                    // {text: "SKCK", value: "skck", align: "center"},
                     {text: "Actions", value:'actions'}
                 ],
                 driver: new FormData,
@@ -383,7 +386,7 @@ export default {
         methods:{
             setForm(){
                 if(this.inputType !== 'Tambah'){
-                    this.update();
+                    this.dialogConfirm1 = true;
                 }else{
                     this.save();
                 }
@@ -507,12 +510,6 @@ export default {
                 this.driver.append('tarif_driver_harian',this.form.tarif_driver_harian);
                 this.driver.append('kemampuan_bahasa_asing',this.form.kemampuan_bahasa_asing);
                 this.driver.append('no_sim_driver',this.form.no_sim_driver);
-                // this.driver.append('sim_driver',this.form.sim_driver);
-                // this.driver.append('surat_bebas_napza',this.form.surat_bebas_napza);
-                // this.driver.append('surat_kesehatan_jiwa',this.form.surat_kesehatan_jiwa);
-                // this.driver.append('surat_kesehatan_jasmani',this.form.surat_kesehatan_jasmani);
-                // this.driver.append('skck',this.form.skck);
-                // this.driver.append('foto_driver',this.form.foto_driver);
                 this.driver.append('email', this.form.email_driver);
 
                 var url = this.$api+'/driver/'
@@ -582,12 +579,6 @@ export default {
                 this.driver.append('tarif_driver_harian',this.form.tarif_driver_harian);
                 this.driver.append('kemampuan_bahasa_asing',this.form.kemampuan_bahasa_asing);
                 this.driver.append('no_sim_driver',this.form.no_sim_driver);
-                // this.driver.append('sim_driver',this.form.sim_driver);
-                // this.driver.append('surat_bebas_napza',this.form.surat_bebas_napza);
-                // this.driver.append('surat_kesehatan_jiwa',this.form.surat_kesehatan_jiwa);
-                // this.driver.append('surat_kesehatan_jasmani',this.form.surat_kesehatan_jasmani);
-                // this.driver.append('skck',this.form.skck);
-                // this.driver.append('foto_driver',this.form.foto_driver);
                 this.driver.append('email', this.form.email_driver);
                 this.driver.append('password_driver', this.form.password_driver);
                 this.driver.append('status_aktif',this.form.status_aktif);
@@ -603,6 +594,7 @@ export default {
                     this.color = "green";
                     this.snackbar1 = true;
                     this.load = false;
+                    this.dialogConfirm1 = false;
                     this.close();
                     this.readData();
                     this.resetForm();
@@ -645,6 +637,9 @@ export default {
                 this.dialogConfirm = false;
                 this.inputType = 'Tambah'
             },
+            cancel1(){
+                this.dialogConfirm1 = false;
+            },
             resetForm(){
             this.form = {
                 nama_driver: '',
@@ -655,15 +650,8 @@ export default {
                     tarif_driver_harian: null,
                     kemampuan_bahasa_asing: '',
                     no_sim_driver: null,
-                    // sim_driver: null,
-                    // surat_bebas_napza: null,
-                    // surat_kesehatan_jiwa: null,
-                    // surat_kesehatan_jasmani: null,
-                    // skck: null,
                     email_driver: '',
                     status_ketersediaan_driver: ''
-
-                    // foto_driver: null,
             }
             },
             editHandler(item){

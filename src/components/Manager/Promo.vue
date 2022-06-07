@@ -80,6 +80,20 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="dialogConfirm1" persistent max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Warning!</span>
+        </v-card-title>
+        <v-card-text>Anda yakin ingin mengubah data promo ini?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel1">Batal</v-btn>
+          <v-btn color="blue darken-1" text @click="update">Konfirmasi</v-btn>          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-snackbar v-model="snackbar1" :color="color" timeout="2000" bottom>
       {{response_message}}
     </v-snackbar>
@@ -102,6 +116,7 @@ export default({
             search: null,
             dialog: false,
             dialogConfirm: false,
+            dialogConfirm1: false,
             headers: [
                 {text: "Kode Promo", value: "kode_promo"},
                 {text: "Jenis Promo", value: "jenis_promo"},
@@ -126,7 +141,7 @@ export default({
     methods:{
         setForm(){
             if(this.inputType !== 'Tambah'){
-                this.update();
+                this.dialogConfirm1 = true;
             }else{
                 this.save();
             }
@@ -194,6 +209,7 @@ export default({
                     this.color = "green";
                     this.snackbar1 = true;
                     this.load = false;
+                    this.dialogConfirm1 = false;
                     this.close();
                     this.readData();
                     this.resetForm();
@@ -235,6 +251,9 @@ export default({
             this.dialogConfirm = false;
             this.inputType = 'Tambah'
             },
+        cancel1(){
+            this.dialogConfirm1 = false;
+        },
         resetForm(){
             this.form = {
                 kode_promo: '',
