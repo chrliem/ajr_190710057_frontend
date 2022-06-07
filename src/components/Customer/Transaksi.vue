@@ -223,9 +223,21 @@
             <div><strong>RINCIAN BIAYA</strong></div><br>
             <div class="text-left"><strong>Total Biaya Mobil </strong>   : Rp {{transaksi1.total_biaya_mobil}}</div>
             <div class="text-left"><strong>Total Biaya Driver  </strong>   : Rp {{transaksi1.total_biaya_driver}}</div>
+            <v-divider></v-divider>
+            <div class="text-left"><strong>Subtotal </strong> : Rp {{transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver}}</div>
+            <v-divider></v-divider>
+            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Promo  </strong>   : {{transaksi1.kode_promo}} [{{transaksi1.potongan_promo*100}}%]</div>
+            <span v-if="transaksi1.kode_promo===null">
+                <div class="text-left"><strong>Potongan Promo </strong>   : Rp 0</div>
+            </span>
+            <span v-else>
+                <div class="text-left"><strong>Potongan Promo  </strong>   : - Rp {{(transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver)*transaksi1.potongan_promo}}</div>
+            </span>
+            <v-divider></v-divider>
+            <div class="text-left"><strong>Subtotal </strong> : Rp {{transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver-(transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver)*transaksi1.potongan_promo}}</div>
+            <v-divider></v-divider>
             <div class="text-left"><strong>Total Biaya Ekstensi  </strong>   : Rp {{transaksi1.total_biaya_ekstensi}}</div>
-            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Promo  </strong>   : {{transaksi1.kode_promo}}</div>
-            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Potongan Promo  </strong>   : {{transaksi1.potongan_promo*100}}%</div>
+            
             <v-divider></v-divider>
              <span v-if="transaksi1.tgl_pengembalian===null">
                 <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran-transaksi1.grand_total_pembayaran*transaksi1.potongan_promo}}</div>
@@ -263,9 +275,7 @@
             </v-card-text>
             <v-card-text>
           <v-card-actions class="justify-center">
-              <!-- <v-btn :disabled="transaksi1.status_transaksi==='Selesai'||transaksi1.status_transaksi==='Batal'||transaksi1.status_transaksi==='Menunggu Verifikasi'||transaksi1.status_transaksi==='Verifikasi Ditolak'" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn> -->
-              <!-- <v-btn :disabled="transaksi1.status_transaksi!=='Menunggu Verifikasi'" color="error" @click="deleteHandler(transaksi1.no_transaksi)">Pembatalan</v-btn>  -->
-              <v-btn :disabled="transaksi1.tgl_pengembalian===null" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn>
+              <v-btn :disabled="transaksi1.tgl_pengembalian===null || transaksi1.status_pembayaran==='Lunas'" color="success" @click="bayar(transaksi1.no_transaksi)">Pembayaran</v-btn>
 
           </v-card-actions>
           </v-card-text>

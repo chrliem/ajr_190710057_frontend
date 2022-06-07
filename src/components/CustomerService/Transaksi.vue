@@ -197,11 +197,29 @@
             <div class="text-left"><strong>Tanggal Pengembalian  </strong>      : {{transaksi1.tgl_pengembalian}}</div>
             <br><v-divider></v-divider><br>
             <div><strong>RINCIAN BIAYA</strong></div><br>
-            <div class="text-left"><strong>Total Biaya Mobil </strong>   : Rp {{transaksi1.total_biaya_mobil}}</div>
+            <!-- <div class="text-left"><strong>Total Biaya Mobil </strong>   : Rp {{transaksi1.total_biaya_mobil}}</div>
             <div class="text-left"><strong>Total Biaya Driver  </strong>   : Rp {{transaksi1.total_biaya_driver}}</div>
             <div class="text-left"><strong>Total Biaya Ekstensi  </strong>   : Rp {{transaksi1.total_biaya_ekstensi}}</div>
             <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Promo  </strong>   : {{transaksi1.kode_promo}}</div>
             <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Potongan Promo  </strong>   : {{transaksi1.potongan_promo*100}}%</div>
+            <v-divider></v-divider> -->
+            <div class="text-left"><strong>Total Biaya Mobil </strong>   : Rp {{transaksi1.total_biaya_mobil}}</div>
+            <div class="text-left"><strong>Total Biaya Driver  </strong>   : Rp {{transaksi1.total_biaya_driver}}</div>
+            <v-divider></v-divider>
+            <div class="text-left"><strong>Subtotal </strong> : Rp {{transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver}}</div>
+            <v-divider></v-divider>
+            <div v-show="transaksi1.kode_promo!==null" class="text-left"><strong>Promo  </strong>   : {{transaksi1.kode_promo}} [{{transaksi1.potongan_promo*100}}%]</div>
+            <span v-if="transaksi1.kode_promo===null">
+                <div class="text-left"><strong>Potongan Promo </strong>   : Rp 0</div>
+            </span>
+            <span v-else>
+                <div class="text-left"><strong>Potongan Promo  </strong>   : - Rp {{(transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver)*transaksi1.potongan_promo}}</div>
+            </span>
+            <v-divider></v-divider>
+            <div class="text-left"><strong>Subtotal </strong> : Rp {{transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver-(transaksi1.total_biaya_mobil+transaksi1.total_biaya_driver)*transaksi1.potongan_promo}}</div>
+            <v-divider></v-divider>
+            <div class="text-left"><strong>Total Biaya Ekstensi  </strong>   : Rp {{transaksi1.total_biaya_ekstensi}}</div>
+            
             <v-divider></v-divider>
             <span v-if="transaksi1.tgl_pengembalian===null">
                 <div class="text-left"><strong>Grand Total  </strong>   : Rp {{transaksi1.grand_total_pembayaran-transaksi1.grand_total_pembayaran*transaksi1.potongan_promo}}</div>

@@ -61,13 +61,6 @@
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="save">Regsiter</v-btn>          
         </v-card-actions>
-        <!-- <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
-            <div v-for="(errorArray, index) in error_message" :key="index">
-                <div v-for="(error_message,  index) in errorArray" :key="index">
-                    {{error_message}}
-                </div>
-            </div>
-        </v-snackbar> -->
       </v-card>
     </v-dialog>
 
@@ -79,7 +72,8 @@
         <v-card-text>
           <v-container>
             <v-text-field v-model="form.email" label="Email" required></v-text-field>
-            <v-text-field v-model="form.password" type="password" label="Password" required></v-text-field>        
+            <v-text-field :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'" :type="show3 ? 'text' : 'password'" @click:append="show3 = !show3" v-model="form.password" label="Password" required></v-text-field>        
+          <v-chip color="primary">Password berformat DD/MM/YYYY tanggal lahir Anda</v-chip>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -87,13 +81,6 @@
           <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
           <v-btn color="blue darken-1" text @click="login">Login</v-btn>          
         </v-card-actions>
-        <!-- <v-snackbar v-model="snackbar" :color="color" timeout="2000" top>
-            <div v-for="(errorArray, index) in error_message" :key="index">
-                <div v-for="(error_message,  index) in errorArray" :key="index">
-                    {{error_message}}
-                </div>
-            </div>
-        </v-snackbar> -->
       </v-card>
     </v-dialog>
 
@@ -133,6 +120,8 @@ export default{
             snackbar1: false,
             snackbar2: false,
             customer: new FormData,
+            show3: false,
+            password: 'Password',
             form: {
                 nama_customer: '',
                 alamat_customer: '',
@@ -186,11 +175,19 @@ export default{
                     this.resetForm();
                     location.reload();
                 }).catch(error=>{
+                  this.error_message = error.response.data.message;
+                  if(error.response.data.message==='Pendaftar harus berusia minimal 17 tahun'){
+                    this.error_message = error.response.data.message;
+                    this.snackbar2 = true;
+                    this.color = "blue";
+                  }else{
                     this.error_message = error.response.data.message;
                     console.log("Register",error.response.data.message)
                     this.color = "blue";
                     this.snackbar = true;
                     this.load = false;
+                  }
+                    
                 });
         },
         login(){
