@@ -208,7 +208,7 @@ export default({
         update(){
             this.detailjadwal.append('id_pegawai',this.form.id_pegawai);
             this.detailjadwal.append('id_jadwal',this.form.id_jadwal);
-            var url = this.$api+'/detailjadwal/'+this.editId;
+            var url = this.$api+'/detailjadwal/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.detailjadwal, {
                     headers: {
@@ -232,7 +232,7 @@ export default({
                 });
         },
         deleteData(){
-            var url = this.$api+'/detailjadwal/'+this.deleteId;
+            var url = this.$api+'/detailjadwal/'+this.deleteId+'/';
             this.load = true;
             this.$http.delete(url,{
                 headers: {

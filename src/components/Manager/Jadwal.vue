@@ -19,7 +19,6 @@
         <v-card class="elevation-6">
             <v-data-table :headers="headers" :items="jadwals" :search="search">
                 <template v-slot:[`item.actions`]="{ item }">
-                    <!-- <v-chip><v-icon color="blue" @click="editHandler(item)">mdi-pencil</v-icon></v-chip> -->
                    <v-chip><v-icon color="red" @click="deleteHandler(item.id_jadwal)">mdi-delete</v-icon></v-chip>                 
                 </template>
                  <template v-slot:[`item.shift`]="{ item }">
@@ -168,34 +167,8 @@ export default({
                 this.load = false;
             });
         },
-        update(){
-            this.jadwal.append('shift', this.form.shift);
-            this.jadwal.append('hari',this.form.hari);
-
-            var url = this.$api+'/jadwalpegawai/'+this.editId;
-                this.load = true;
-                this.$http.post(url, this.jadwal, {
-                    headers: {
-                    'Authorization':'Bearer ' + localStorage.getItem('token'),
-                    }
-                }).then(response => {
-                    this.response_message = response.data.message;
-                    this.color = "green";
-                    this.snackbar1 = true;
-                    this.load = false;
-                    this.close();
-                    this.readData();
-                    this.resetForm();
-                    this.inputType='Tambah';
-                }).catch(error=>{
-                    this.error_message = error.response.data.message;
-                    this.color = "blue";
-                    this.snackbar = true;
-                    this.load = false;
-                });
-        },
         deleteData(){
-            var url = this.$api+'/jadwalpegawai/'+this.deleteId;
+            var url = this.$api+'/jadwalpegawai/'+this.deleteId+'/';
             this.load = true;
             this.$http.delete(url,{
                 headers: {
@@ -219,24 +192,10 @@ export default({
             });
         },
         cancel(){
-            this.resetForm();
             this.readData();
             this.dialog = false;
             this.dialogConfirm = false;
             this.inputType = 'Tambah'
-            },
-        resetForm(){
-            this.form = {
-                shift: '',
-                hari: ''
-            }
-        },
-        editHandler(item){
-            this.inputType = 'Ubah';
-            this.editId = item.id_jadwal;
-            this.form.shift = item.shift;
-            this.form.hari = item.hari
-            this.dialog = true;
         },
         deleteHandler(id_jadwal){
             this.deleteId = id_jadwal;

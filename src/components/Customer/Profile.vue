@@ -37,14 +37,14 @@
             <p><strong>Dokumen: </strong></p>
             <strong>Kartu Identitas Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/kartu_identitas_customer/'+customers.kartu_identitas_customer"
+                :src="$baseURL+'/storage/kartu_identitas_customer/'+customers.kartu_identitas_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img height="800px"
-                width="1200px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customers.kartu_identitas_customer"></v-img>
+                <v-img height="600px"
+                width="800px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customers.kartu_identitas_customer+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div v-if="customers.sim_customer===null">
@@ -54,15 +54,15 @@
             <div v-else>
             <strong>SIM Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/sim_customer/'+customers.sim_customer"
+                :src="$baseURL+'/storage/sim_customer/'+customers.sim_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                  @click="overlay1=!overlay1"
             ></v-img>
             <v-overlay absolute="true" :value="overlay1">
-                <v-img :src="$baseURL+'/storage/sim_customer/'+customers.sim_customer" 
-                height="800px"
-                width="1200px"></v-img>
+                <v-img :src="$baseURL+'/storage/sim_customer/'+customers.sim_customer+'/'" 
+                height="600px"
+                width="800px"></v-img>
              <v-btn color="success" @click="overlay1 = false">Close</v-btn>
           </v-overlay>
             </div>
@@ -183,7 +183,7 @@ export default{
     },
     methods: {
     readData(){
-            var url=this.$api+'/customer-profile/'+ localStorage.getItem('id');
+            var url=this.$api+'/customer-profile/'+ localStorage.getItem('id')+'/';
             this.$http.get(url,{
                 headers:{
                     'Authorization':'Bearer '+localStorage.getItem('token')
@@ -233,7 +233,7 @@ export default{
             this.customer.append('email', this.form.email_customer);
             this.customer.append('password',this.form.password_customer);
 
-            var url = this.$api+'/customer/'+this.editId
+            var url = this.$api+'/customer/'+this.editId+'/'
                 this.load = true;
                 this.$http.post(url, this.customer, {
                     headers: {

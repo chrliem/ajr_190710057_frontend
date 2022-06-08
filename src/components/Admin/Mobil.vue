@@ -24,7 +24,7 @@
                 </template>
                 <template v-slot:[`item.foto_mobil`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/foto_mobil/'+item.foto_mobil"
+                        :src="$baseURL+'/storage/foto_mobil/'+item.foto_mobil+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
@@ -84,13 +84,13 @@
             </v-card-title>
             <v-card-text align="left">
             <v-img
-                :src="$baseURL+'/storage/foto_mobil/'+mobil1.foto_mobil"
+                :src="$baseURL+'/storage/foto_mobil/'+mobil1.foto_mobil+'/'"
                 height="300px"
                 width="500px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img :src="$baseURL+'/storage/foto_mobil/'+mobil1.foto_mobil"></v-img>
+                <v-img :src="$baseURL+'/storage/foto_mobil/'+mobil1.foto_mobil+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div class="text-left"><strong>Plat Nomor </strong>   : {{mobil1.no_plat}}</div>
@@ -346,7 +346,7 @@ export default {
                     })
         },
         readDatabyId(){
-                var url=this.$api+'/mobil/'+this.getId+'/id'
+                var url=this.$api+'/mobil/'+this.getId+'/id/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -356,7 +356,7 @@ export default {
                     })
             },
         getMobilHabisKontrak(){
-               var url=this.$api+'/mobil/habiskontrak'
+               var url=this.$api+'/mobil/habiskontrak/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -475,7 +475,7 @@ export default {
                 this.mobil.append('status_ketersediaan_mobil', this.form.status_ketersediaan_mobil);
             }
             
-            var url = this.$api+'/mobil/'+this.editId;
+            var url = this.$api+'/mobil/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.mobil, {
                     headers: {
@@ -500,7 +500,7 @@ export default {
                 });
         },
         deleteData(){
-            var url = this.$api+'/mobil/'+this.deleteId+'/delete';
+            var url = this.$api+'/mobil/'+this.deleteId+'/delete/';
             this.load = true;
             this.$http.get(url,{
                 headers: {

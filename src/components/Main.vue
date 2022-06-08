@@ -191,7 +191,7 @@ export default{
                 });
         },
         login(){
-            this.$http.post(this.$api + '/login', {
+            this.$http.post(this.$api + '/login/', {
               email: this.form.email,
               password: this.form.password
             }).then(response =>{

@@ -81,7 +81,7 @@
           <v-radio v-for="mobil in mobils" v-show="mobil.status_ketersediaan_mobil===1" :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
                     <template v-slot:label>
                         <v-card width="300px" color="white">
-                            <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil"></v-img>
+                            <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil+'/'"></v-img>
                             <v-divider></v-divider>
                             <v-card-text>
                             <div class="text-left"><strong>Nama Mobil</strong> : {{mobil.nama_mobil}}</div>
@@ -102,7 +102,7 @@
                 <v-radio v-for="driver in drivers" v-show="driver.status_ketersediaan_driver===1" :label="driver.nama_driver " :key="driver.id_driver" :value="driver.id_driver">
                     <template v-slot:label>
                         <v-card width="300px" color="white">
-                            <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver"></v-img>
+                            <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver+'/'"></v-img>
                             <v-divider></v-divider>
                             <v-card-text>
                             <div class="text-left"><strong>Nama Driver </strong>   : {{driver.nama_driver}}</div>
@@ -184,7 +184,7 @@
                 <v-col cols="12" lg="6">
                     <div class="text-left"><strong>Mobil yang Disewa  </strong>   : </div>
                     <v-card width="300px" color="white">
-                        <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+transaksi1.foto_mobil"></v-img>
+                        <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+transaksi1.foto_mobil+'/'"></v-img>
                         <v-divider></v-divider>
                         <v-card-text>
                         <div class="text-left"><strong>Nama Mobil</strong> : {{transaksi1.nama_mobil}}</div>
@@ -202,7 +202,7 @@
                 <v-col cols="12" lg="6">
                     <div v-show="transaksi1.nama_driver!==null" class="text-left"><strong>Driver yang Disewa </strong>   :</div>
                    <v-card v-show="transaksi1.nama_driver!==null" width="300px" color="white">
-                        <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+transaksi1.foto_driver"></v-img>
+                        <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+transaksi1.foto_driver+'/'"></v-img>
                         <v-divider></v-divider>
                         <v-card-text>
                         <div class="text-left"><strong>Nama Driver </strong>   : {{transaksi1.nama_driver}}</div>
@@ -269,7 +269,7 @@
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
+                <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             </v-card-text>
@@ -399,7 +399,9 @@
         <v-snackbar v-model="snackbar2" :color="color" timeout="2000" bottom>
             {{error_message}}
         </v-snackbar>
-        
+        <v-snackbar v-model="snackbar3" :color="color" timeout="2000" bottom>
+            {{response_message}}
+        </v-snackbar>
     </v-main>
 </template>
 
@@ -417,6 +419,7 @@ import moment from 'moment'
                 load: false,
                 snackbar: false,
                 snackbar1: false,
+                snackbar3: false,
                 error_message: '',
                 response_message:'',
                 color: '',
@@ -525,41 +528,8 @@ import moment from 'moment'
                     return 'Tidak Bisa'
                 }
             },
-            // cekTipeTransaksi(){
-            //     var url = this.$api+'/customer-profile/'+localStorage.getItem('id');
-            //     this.$http.get(url,{
-            //         headers:{
-            //             'Authorization':'Bearer '+localStorage.getItem('token')
-            //         }
-            //     }).then(response=>{
-            //         this.customers=response.data.data
-            //         console.log(this.customers)
-            //     })
-
-            //     // if(customers.tipe_transaksi===1){
-            //     //     return true
-            //     // }else if(customers.tipe_transaksi===0){
-            //     //     return false
-            //     // }
-            // },
-            // cekVerifikasiCustomer(){
-            //     var url=this.$api+'/customer-profile/'+ localStorage.getItem('id');
-            //     this.$http.get(url,{
-            //         headers:{
-            //             'Authorization':'Bearer '+localStorage.getItem('token')
-            //         }
-            //     }).then(response=>{
-            //         this.customers=response.data.data
-            //     })
-
-            //     // if(customers.tipe_transaksi===null){
-            //     //     return true
-            //     // }else{
-            //     //     return false
-            //     // }
-            // },
             readCustomer(){
-                 var url=this.$api+'/customer-profile/'+ localStorage.getItem('id');
+                 var url=this.$api+'/customer-profile/'+ localStorage.getItem('id')+'/';
                 this.$http.get(url,{
                     headers:{
                         'Authorization':'Bearer '+localStorage.getItem('token')
@@ -569,7 +539,7 @@ import moment from 'moment'
                 })
             },
             print(no_transaksi){
-                 var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'/cetak-nota';
+                 var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'/cetak-nota/';
                  console.log(url)
                 this.$http.get(url,{
                     headers:{
@@ -619,7 +589,7 @@ import moment from 'moment'
                 })
             },
             readData(){
-                var url =  this.$api+'/transaksipenyewaan-customer/'+localStorage.getItem('id')
+                var url =  this.$api+'/transaksipenyewaan-customer/'+localStorage.getItem('id')+'/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -630,7 +600,7 @@ import moment from 'moment'
 
             },
             readDatabyId(){
-                var url=this.$api+'/transaksipenyewaan/'+this.getId
+                var url=this.$api+'/transaksipenyewaan/'+this.getId+'/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -645,11 +615,6 @@ import moment from 'moment'
             },
             save(){
 
-                // var bukti_pembayaran = document.getElementById('bukti_pembayaran');
-
-                // if(bukti_pembayaran.files[0]){
-                //     this.transaksi.append('bukti_pembayaran',bukti_pembayaran.files[0]);
-                // }
                 var formatted_tgl_mulai_sewa = moment(this.form.tanggal_mulai_sewa).format( "YYYY-MM-DD")
                 var formatted_jam_mulai_sewa = moment(this.form.jam_mulai_sewa,"hh:mm").format("HH:mm:ss")
                 var formatted_datetime_mulai_sewa = formatted_tgl_mulai_sewa+' '+formatted_jam_mulai_sewa
@@ -688,13 +653,22 @@ import moment from 'moment'
                     }
                 }).then(response=>{
                     this.response_message = response.data.message;
-                    this.color = "green";
-                    this.snackbar1 = true;
-                    this.load = true;
-                    this.close();
-                    this.readData();
-                    this.resetForm();
-                    location.reload();
+                    if(response.data.message==='Transaksi penyewaan sebelumnya belum selesai'){
+                        this.color = "blue";
+                        this.snackbar3 = true;
+                        this.load = true;
+                        this.close();
+                        this.readData();
+                        this.resetForm();
+                    }else{
+                        this.color = "green";
+                        this.snackbar1 = true;
+                        this.load = true;
+                        this.close();
+                        this.readData();
+                        this.resetForm();
+                    }
+                    
                 }).catch(error=>{
                     this.error_message = error.response.data.message;
                     console.log(error.response.data.message)
@@ -717,7 +691,7 @@ import moment from 'moment'
 
                 this.transaksi.append('metode_pembayaran', this.form.metode_pembayaran);
 
-                var url = this.$api+'/transaksipenyewaan/'+this.editId+'/pembayaran'
+                var url = this.$api+'/transaksipenyewaan/'+this.editId+'/pembayaran/'
                 this.load = true;
                 this.$http.post(url, this.transaksi, {
                     headers: {
@@ -739,29 +713,6 @@ import moment from 'moment'
                     this.load = false;
                 });
         },
-        // deleteData(){
-        //     var url = this.$api+'/transaksipenyewaan/'+this.deleteId+'/pembatalan';
-        //         this.load = true;
-        //         this.$http.get(url,{
-        //             headers: {
-        //             'Authorization':'Bearer ' + localStorage.getItem('token'),
-        //             }
-        //         }).then(response => {
-        //             this.response_message = response.data.message;
-        //             this.color = "green";
-        //             this.snackbar1 = true;
-        //             this.load = false;
-        //             this.close();
-        //             this.readData();
-        //             this.resetForm();
-        //             this.inputType='Tambah';
-        //         }).catch(error=>{
-        //             this.error_message = error.response.data.message;
-        //             this.color = "blue";
-        //             this.snackbar = true;
-        //             this.load = false;
-        //         });
-        // },
         cancel(){
             this.resetForm();
             this.readData();
@@ -828,7 +779,7 @@ import moment from 'moment'
             this.transaksi.append('rating_driver', this.form.rating_driver)
             this.transaksi.append('rating_ajr', this.form.rating_ajr)
 
-            var url = this.$api+'/transaksipenyewaan/'+this.rateId+'/rating'
+            var url = this.$api+'/transaksipenyewaan/'+this.rateId+'/rating/'
                 this.load = true;
                 this.$http.post(url, this.transaksi, {
                     headers: {
@@ -856,10 +807,6 @@ import moment from 'moment'
             this.readDatabyId();
             this.detail_transaksi = true;
         },
-        // deleteHandler(no_transaksi){
-        //     this.deleteId = no_transaksi;
-        //     this.dialogConfirm = true;
-        // },
         ratingHandler(transaksi){
             this.rateId = transaksi.no_transaksi;
             if(transaksi.id_driver===null){

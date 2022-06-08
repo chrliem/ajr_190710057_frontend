@@ -24,20 +24,20 @@
                 </template>
                 <template v-slot:[`item.kartu_identitas_customer`]="{ item }">
                     <v-img
-                        :src="$baseURL+'/storage/kartu_identitas_customer/'+item.kartu_identitas_customer"
+                        :src="$baseURL+'/storage/kartu_identitas_customer/'+item.kartu_identitas_customer+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
                 </template>
                 <template v-slot:[`item.sim_customer`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/sim_customer/'+item.sim_customer"
+                        :src="$baseURL+'/storage/sim_customer/'+item.sim_customer+'/'"
                         height="50px"
                         width="50px"
                         @click="overlay1=!overlay1"
                     ></v-img>
                     <v-overlay :value="overlay1">
-                        <v-img :src="$baseURL+'/storage/sim_customer/'+item.sim_customer"></v-img>
+                        <v-img :src="$baseURL+'/storage/sim_customer/'+item.sim_customer+'/'"></v-img>
                     <v-btn color="success" @click="overlay1 = false">Close</v-btn>
                     </v-overlay>
                 </template>
@@ -77,14 +77,14 @@
             <p><strong>Dokumen: </strong></p>
             <strong>Kartu Identitas Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer"
+                :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :value="overlay">
                 <v-img height="600px"
-                width="800px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer"></v-img>
+                width="800px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div v-if="customer1.sim_customer===null">
@@ -94,13 +94,13 @@
             <div v-else>
             <strong>SIM Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer"
+                :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                  @click="overlay1=!overlay1"
             ></v-img>
             <v-overlay :value="overlay1">
-                <v-img :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer" 
+                <v-img :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer+'/'" 
                 height="600px"
                 width="800px"></v-img>
              <v-btn color="success" @click="overlay1 = false">Close</v-btn>
@@ -121,14 +121,14 @@
             <p><strong>Dokumen: </strong></p>
             <strong>Kartu Identitas Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer"
+                :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :value="overlay">
                 <v-img height="800px"
-                width="1200px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer"></v-img>
+                width="1200px" :src="$baseURL+'/storage/kartu_identitas_customer/'+customer1.kartu_identitas_customer+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div v-if="customer1.sim_customer===null">
@@ -138,13 +138,13 @@
             <div v-else>
             <strong>SIM Customer</strong>
             <v-img
-                :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer"
+                :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer+'/'"
                 max-height="200px"
                 max-width="300px"
                  @click="overlay1=!overlay1"
             ></v-img>
             <v-overlay :value="overlay1">
-                <v-img :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer" 
+                <v-img :src="$baseURL+'/storage/sim_customer/'+customer1.sim_customer+'/'" 
                 height="800px"
                 width="1200px"></v-img>
              <v-btn color="success" @click="overlay1 = false">Close</v-btn>
@@ -187,14 +187,6 @@
                 headers: [
                     {text: "ID Customer", value: "id_customer"},
                     {text: "Nama Customer", value:"nama_customer"},
-                    // {text: "Alamat", value:"alamat_customer"},
-                    // {text: "Tanggal Lahir",value: "tgl_lahir_customer"},
-                    // {text: "Jenis Kelamin", value: "jenis_kelamin_customer"},
-                    // {text: "No Telepon", value: "no_telepon_customer"},
-                    // {text: "No Kartu Identitas", value:"no_kartu_identitas_customer"},
-                    // {text: "Kartu Identitas", value: "kartu_identitas_customer"},
-                    // {text: "No SIM", value:"no_sim_customer"},
-                    // {text: "SIM", value:"sim_customer"},
                     {text: "Email", value:"email"},
                     {text: "Tipe Sewa", value:"tipe_sewa_customer"},
                     {text: "Action", value:"actions"}
@@ -214,7 +206,7 @@
                     })
             },
             verifyData(id_customer){
-                var url=this.$api+'/customer/'+id_customer+'/verifikasi'
+                var url=this.$api+'/customer/'+id_customer+'/verifikasi/'
                 this.load = true;
                 this.$http.get(url, {
                     headers:{
@@ -253,7 +245,7 @@
                 }
                 },
             readDatabyId(){
-                var url=this.$api+'/customer/'+this.getId
+                var url=this.$api+'/customer/'+this.getId+'/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),

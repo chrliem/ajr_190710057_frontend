@@ -198,7 +198,7 @@ export default({
             this.promo.append('keterangan',this.form.keterangan);
             this.promo.append('potongan_promo',convertPotongan);
             this.promo.append('status_promo',this.form.status_promo);
-            var url = this.$api+'/promo/'+this.editId;
+            var url = this.$api+'/promo/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.promo, {
                     headers: {
@@ -222,7 +222,7 @@ export default({
                 });
         },
         deleteData(){
-            var url = this.$api+'/promo/'+this.deleteId+'/delete';
+            var url = this.$api+'/promo/'+this.deleteId+'/delete/';
             this.load = true;
             this.$http.get(url,{
                 headers: {

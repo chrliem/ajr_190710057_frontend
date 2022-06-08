@@ -29,7 +29,7 @@
                 </template>
                 <template v-slot:[`item.foto_pegawai`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/foto_pegawai/'+item.foto_pegawai"
+                        :src="$baseURL+'/storage/foto_pegawai/'+item.foto_pegawai+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
@@ -52,13 +52,13 @@
             </v-card-title>
             <v-card-text align="left">
             <v-img
-                :src="$baseURL+'/storage/foto_pegawai/'+pegawai1.foto_pegawai"
+                :src="$baseURL+'/storage/foto_pegawai/'+pegawai1.foto_pegawai+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img width="550px" height="550px" :src="$baseURL+'/storage/foto_pegawai/'+pegawai1.foto_pegawai"></v-img>
+                <v-img width="550px" height="550px" :src="$baseURL+'/storage/foto_pegawai/'+pegawai1.foto_pegawai+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div class="text-left"><strong>Nama Pegawai </strong>   : {{pegawai1.nama_pegawai}}</div>
@@ -264,13 +264,14 @@
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
+                            'Access-Control-Allow-Origin':'*'
                         }
                     }).then(response=>{
                         this.pegawais=response.data.data
                     })
             },
             readDatabyId(){
-                var url=this.$api+'/pegawai/'+this.getId
+                var url=this.$api+'/pegawai/'+this.getId+'/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -335,7 +336,7 @@
                 this.pegawai.append('email', this.form.email_pegawai);
                 this.pegawai.append('status_aktif',this.form.status_aktif);
               
-                var url = this.$api+'/pegawai/'+this.editId;
+                var url = this.$api+'/pegawai/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.pegawai, {
                     headers: {
@@ -360,7 +361,7 @@
                 });
             },
             deleteData(){
-                var url = this.$api+'/pegawai/'+this.deleteId+'/delete';
+                var url = this.$api+'/pegawai/'+this.deleteId+'/delete/';
                 this.load = true;
                 this.$http.get(url,{
                     headers: {

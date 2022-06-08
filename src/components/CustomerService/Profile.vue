@@ -14,13 +14,13 @@
   
       <v-card-text align="left">
         <v-img
-                :src="$baseURL+'/storage/foto_pegawai/'+pegawais.foto_pegawai"
+                :src="$baseURL+'/storage/foto_pegawai/'+pegawais.foto_pegawai+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img :src="$baseURL+'/storage/foto_pegawai/'+pegawais.foto_pegawai"></v-img>
+                <v-img height="550px" width="550px" :src="$baseURL+'/storage/foto_pegawai/'+pegawais.foto_pegawai+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
             <div class="text-left"><strong>Nama Pegawai </strong>   : {{pegawais.nama_pegawai}}</div>
@@ -36,55 +36,9 @@
             >{{setStatus(pegawais.status_aktif)}}</v-chip>
       </v-card-text>
     <v-card-actions>
-       <!-- <v-btn color="primary" dark @click="editHandler(pegawais)" > Edit Profil
-        </v-btn> -->
     </v-card-actions>
   </v-card>
    </v-container>
-
-  <!-- <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline"> Edit Profil Pegawai </span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-text-field v-model="form.nama_pegawai" label="Nama Pegawai" required></v-text-field>
-            <v-radio-group v-model="form.id_role" label="Role Pegawai" required>
-              <v-radio v-bind:value="2" label="Customer Service"></v-radio>
-              <v-radio v-bind:value="3" label="Admin"></v-radio>
-            </v-radio-group>
-            <p>Tanggal Lahir Pegawai</p>
-            <v-date-picker v-model="form.tgl_lahir_pegawai" label="Tanggal Lahir Pegawai" required></v-date-picker>
-            <v-radio-group v-model="form.jenis_kelamin_pegawai" label="Jenis Kelamin Pegawai" required>
-              <v-radio value="Laki-laki" label="Laki-laki"></v-radio>
-              <v-radio  value="Perempuan" label="Perempuan"></v-radio>
-            </v-radio-group>
-            <v-text-field v-model="form.alamat_pegawai" label="Alamat Pegawai" required></v-text-field>
-            <v-text-field v-model="form.no_telepon_pegawai" label="No Telepon Pegawai" required></v-text-field>
-            <v-text-field v-model="form.email_pegawai" label="Email Pegawai" required></v-text-field>
-            <v-text-field 
-                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show1 ? 'text' : 'password'"
-                @click:append="show1 = !show1"
-                v-model="form.password_pegawai" label="Password Pegawai" required></v-text-field>
-            <v-file-input
-                v-model="form.foto_pegawai"
-                enctype="multipart/form-data"
-                accept="image/png, image/jpeg, image/bmp"
-                placeholder="Upload Foto Pegawai"
-                prepend-icon="mdi-camera"
-                label="Foto Pegawai"
-              ></v-file-input>       
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancel">Batal</v-btn>
-          <v-btn color="blue darken-1" text @click="update">Simpan</v-btn>          
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
 
    <v-snackbar v-model="snackbar" :color="color" timeout="2000" bottom>
     {{error_message}}
@@ -123,7 +77,7 @@ export default{
     },
     methods: {
     readData(){
-            var url=this.$api+'/pegawai/' + localStorage.getItem('id')
+            var url=this.$api+'/pegawai/' + localStorage.getItem('id')+'/'
             this.$http.get(url,{
                 headers:{
                     'Authorization':'Bearer '+localStorage.getItem('token')
@@ -167,7 +121,7 @@ export default{
                 this.pegawai.append('password_pegawai', this.form.password_pegawai);
                 this.pegawai.append('status_aktif',this.form.status_aktif);
               
-                var url = this.$api+'/pegawai/'+this.editId;
+                var url = this.$api+'/pegawai/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.pegawai, {
                     headers: {

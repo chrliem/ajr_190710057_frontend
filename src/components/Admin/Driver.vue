@@ -38,35 +38,35 @@
                 </template>
                 <template v-slot:[`item.foto_driver`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/foto_driver/'+item.foto_driver"
+                        :src="$baseURL+'/storage/foto_driver/'+item.foto_driver+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
                 </template>
                  <template v-slot:[`item.sim_driver`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/sim_driver/'+item.sim_driver"
+                        :src="$baseURL+'/storage/sim_driver/'+item.sim_driver+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
                 </template>
                  <template v-slot:[`item.surat_bebas_napza`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/surat_bebas_napza/'+item.surat_bebas_napza"
+                        :src="$baseURL+'/storage/surat_bebas_napza/'+item.surat_bebas_napza+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
                 </template>
                  <template v-slot:[`item.surat_kesehatan_jiwa`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+item.surat_kesehatan_jiwa"
+                        :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+item.surat_kesehatan_jiwa+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
                 </template>
                  <template v-slot:[`item.surat_kesehatan_jasmani`]="{ item }">
                      <v-img
-                        :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+item.surat_kesehatan_jasmani"
+                        :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+item.surat_kesehatan_jasmani+'/'"
                         height="50px"
                         width="50px"
                     ></v-img>
@@ -96,13 +96,13 @@
             </v-card-title>
             <v-card-text align="left">
             <v-img
-                :src="$baseURL+'/storage/foto_driver/'+driver1.foto_driver"
+                :src="$baseURL+'/storage/foto_driver/'+driver1.foto_driver+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img height="550px" width="550px" :src="$baseURL+'/storage/foto_driver/'+driver1.foto_driver"></v-img>
+                <v-img height="550px" width="550px" :src="$baseURL+'/storage/foto_driver/'+driver1.foto_driver+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
             </v-overlay>
             <div class="text-left"><strong>Nama Driver </strong>   : {{driver1.nama_driver}}</div>
@@ -128,57 +128,57 @@
             <p><strong>Dokumen: </strong></p>
             <p> SIM Driver </p>
             <v-img
-                :src="$baseURL+'/storage/sim_driver/'+driver1.sim_driver"
+                :src="$baseURL+'/storage/sim_driver/'+driver1.sim_driver+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay1=!overlay1"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay1">
-                <v-img height="400px" width="600px" :src="$baseURL+'/storage/sim_driver/'+driver1.sim_driver"></v-img>
+                <v-img height="400px" width="600px" :src="$baseURL+'/storage/sim_driver/'+driver1.sim_driver+'/'"></v-img>
              <v-btn color="success" @click="overlay1 = false">Close</v-btn>
           </v-overlay>
           <p> Surat Bebas NAPZA </p>
           <v-img
-                :src="$baseURL+'/storage/surat_bebas_napza/'+driver1.surat_bebas_napza"
+                :src="$baseURL+'/storage/surat_bebas_napza/'+driver1.surat_bebas_napza+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay2=!overlay2"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay2">
-                <v-img height="800px" width="600px" :src="$baseURL+'/storage/surat_bebas_napza/'+driver1.surat_bebas_napza"></v-img>
+                <v-img height="600px" width="400px" :src="$baseURL+'/storage/surat_bebas_napza/'+driver1.surat_bebas_napza+'/'"></v-img>
              <v-btn color="success" @click="overlay2 = false">Close</v-btn>
           </v-overlay>
           <p> Surat kesehatan Jiwa </p>
           <v-img
-                :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+driver1.surat_kesehatan_jiwa"
+                :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+driver1.surat_kesehatan_jiwa+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay3=!overlay3"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay3">
-                <v-img height="800px" width="600px" :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+driver1.surat_kesehatan_jiwa"></v-img>
+                <v-img height="600px" width="400px" :src="$baseURL+'/storage/surat_kesehatan_jiwa/'+driver1.surat_kesehatan_jiwa+'/'"></v-img>
              <v-btn color="success" @click="overlay3 = false">Close</v-btn>
           </v-overlay>
           <p> Surat kesehatan Jasmani </p>
           <v-img
-                :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+driver1.surat_kesehatan_jasmani"
+                :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+driver1.surat_kesehatan_jasmani+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay4=!overlay4"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay4">
-                <v-img height="800px" width="600px"  :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+driver1.surat_kesehatan_jasmani"></v-img>
+                <v-img height="600px" width="400px"  :src="$baseURL+'/storage/surat_kesehatan_jasmani/'+driver1.surat_kesehatan_jasmani+'/'"></v-img>
              <v-btn color="success" @click="overlay4 = false">Close</v-btn>
           </v-overlay>
           <p> SKCK </p>
           <v-img
-                :src="$baseURL+'/storage/skck/'+driver1.skck"
+                :src="$baseURL+'/storage/skck/'+driver1.skck+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay5=!overlay5"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay5">
-                <v-img height="800px" width="600px" :src="$baseURL+'/storage/skck/'+driver1.skck"></v-img>
+                <v-img height="600px" width="400px" :src="$baseURL+'/storage/skck/'+driver1.skck+'/'"></v-img>
              <v-btn color="success" @click="overlay5 = false">Close</v-btn>
           </v-overlay>
             </v-card-text>
@@ -445,7 +445,7 @@ export default {
                     })
             },
             readDatabyId(){
-                var url=this.$api+'/driver/'+this.getId
+                var url=this.$api+'/driver/'+this.getId+'/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -455,7 +455,7 @@ export default {
                     })
             },
             getRerataDriver(){
-                var url=this.$api+'/average-ratingdriver'
+                var url=this.$api+'/average-ratingdriver/'
                     this.$http.get(url,{
                         headers:{
                             'Authorization':'Bearer '+localStorage.getItem('token'),
@@ -583,7 +583,7 @@ export default {
                 this.driver.append('password_driver', this.form.password_driver);
                 this.driver.append('status_aktif',this.form.status_aktif);
     
-            var url = this.$api+'/driver/'+this.editId;
+            var url = this.$api+'/driver/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.driver, {
                     headers: {
@@ -608,7 +608,7 @@ export default {
                 });
             },
             deleteData(){
-            var url = this.$api+'/driver/'+this.deleteId+'/delete';
+            var url = this.$api+'/driver/'+this.deleteId+'/delete/';
             this.load = true;
             this.$http.get(url,{
                 headers: {

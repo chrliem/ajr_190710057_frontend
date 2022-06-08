@@ -190,7 +190,7 @@ export default({
             this.mitra.append('no_ktp_mitra',this.form.no_ktp_mitra);
             this.mitra.append('no_telepon_mitra',this.form.no_telepon_mitra);
             this.mitra.append('status_aktif',this.form.status_aktif);
-            var url = this.$api+'/mitra/'+this.editId;
+            var url = this.$api+'/mitra/'+this.editId+'/';
                 this.load = true;
                 this.$http.post(url, this.mitra, {
                     headers: {
@@ -214,7 +214,7 @@ export default({
                 });
         },
         deleteData(){
-            var url = this.$api+'/mitra/'+this.deleteId+'/delete';
+            var url = this.$api+'/mitra/'+this.deleteId+'/delete/';
             this.load = true;
             this.$http.get(url,{
                 headers: {

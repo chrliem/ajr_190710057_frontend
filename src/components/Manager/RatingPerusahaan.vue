@@ -11,7 +11,6 @@
             <v-card class="elevation-6">
             <v-card-title class="elevation-4">
                 <h7 class="text-h4 font-weight-medium">Rerata Rating Perusahaan
-                    <!-- <v-spacer></v-spacer> -->
                     <v-icon color="warning">mdi-star</v-icon>
                     {{average}}
                 </h7>

@@ -48,7 +48,7 @@
                 <v-radio v-for="mobil in mobils"  :label="mobil.nama_mobil" :key="mobil.id_mobil" :value="mobil.id_mobil">
                         <template v-slot:label>
                             <v-card width="300px" color="white">
-                                <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil"></v-img>
+                                <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+mobil.foto_mobil+'/'"></v-img>
                                 <v-divider></v-divider>
                                 <v-card-text>
                                 <div class="text-left"><strong>Nama Mobil</strong> : {{mobil.nama_mobil}}</div>
@@ -75,7 +75,7 @@
                     <v-radio v-for="driver in drivers"  :label="driver.nama_driver " :key="driver.id_driver" :value="driver.id_driver">
                         <template v-slot:label>
                             <v-card width="300px" color="white">
-                                <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver"></v-img>
+                                <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+driver.foto_driver+'/'"></v-img>
                                 <v-divider></v-divider>
                                 <v-card-text>
                                 <div class="text-left"><strong>Nama Driver </strong>   : {{driver.nama_driver}}</div>
@@ -160,7 +160,7 @@
                 <v-col cols="12" lg="6">
                     <div class="text-left"><strong>Mobil yang Disewa  </strong>   : </div>
                     <v-card width="300px" color="white">
-                        <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+transaksi1.foto_mobil"></v-img>
+                        <v-img max-width="300px" :src="$baseURL+'/storage/foto_mobil/'+transaksi1.foto_mobil+'/'"></v-img>
                         <v-divider></v-divider>
                         <v-card-text>
                         <div class="text-left"><strong>Nama Mobil</strong> : {{transaksi1.nama_mobil}}</div>
@@ -178,7 +178,7 @@
                 <v-col cols="12" lg="6">
                     <div v-show="transaksi1.nama_driver!==null" class="text-left"><strong>Driver yang Disewa </strong>   :</div>
                    <v-card v-show="transaksi1.nama_driver!==null" width="300px" color="white">
-                        <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+transaksi1.foto_driver"></v-img>
+                        <v-img class="mx-auto" max-width="100px" :src="$baseURL+'/storage/foto_driver/'+transaksi1.foto_driver+'/'"></v-img>
                         <v-divider></v-divider>
                         <v-card-text>
                         <div class="text-left"><strong>Nama Driver </strong>   : {{transaksi1.nama_driver}}</div>
@@ -246,13 +246,13 @@
             <div v-show="transaksi1.bukti_pembayaran!==null" class="text-left"><strong>Bukti Pembayaran  </strong>   :</div>
             <v-img
                 v-show="transaksi1.bukti_pembayaran!==null"
-                :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"
+                :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran+'/'"
                 height="200px"
                 width="200px"
                 @click="overlay=!overlay"
             ></v-img>
             <v-overlay :absolute="absolute" :value="overlay">
-                <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran"></v-img>
+                <v-img max-height="800px" max-width="600px" :src="$baseURL+'/storage/bukti_pembayaran/'+transaksi1.bukti_pembayaran+'/'"></v-img>
              <v-btn color="success" @click="overlay = false">Close</v-btn>
           </v-overlay>
         </v-card-text>
@@ -568,7 +568,7 @@ export default{
 
             },
             readDatabyId(no_transaksi){
-                var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'/transaksi'
+                var url=this.$api+'/transaksipenyewaan/'+no_transaksi+'/transaksi/'
                 console.log(url)
                     this.$http.get(url,{
                         headers:{
@@ -605,7 +605,7 @@ export default{
                 
                 
 
-                var url = this.$api+'/transaksipenyewaan/'+this.editId+'/update'
+                var url = this.$api+'/transaksipenyewaan/'+this.editId+'/update/'
                 this.load = true;
                 this.$http.post(url, this.transaksi, {
                     headers: {
@@ -627,7 +627,7 @@ export default{
                 });
         },
         verify(){
-            var url = this.$api+'/transaksipenyewaan/'+this.verifyId+'/verifikasi'
+            var url = this.$api+'/transaksipenyewaan/'+this.verifyId+'/verifikasi/'
             this.load= true
             this.transaksi.append('id_pegawai',localStorage.getItem('id'));
             this.transaksi.append('status_transaksi',this.form.status_transaksi)
@@ -764,7 +764,7 @@ export default{
             this.transaksi.append('tgl_pengembalian', formatted_datetime_pengembalian)
             console.log(formatted_datetime_pengembalian)
             
-            var url = this.$api+'/transaksipenyewaan/'+this.kembaliId+'/pengembalian'
+            var url = this.$api+'/transaksipenyewaan/'+this.kembaliId+'/pengembalian/'
                 this.load = true;
             this.$http.post(url, this.transaksi, {
                 headers: {
@@ -805,7 +805,7 @@ export default{
             this.dialogConfirm3 = true;
         },
         deleteData(){
-            var url = this.$api+'/transaksipenyewaan/'+this.deleteId+'/pembatalan';
+            var url = this.$api+'/transaksipenyewaan/'+this.deleteId+'/pembatalan/';
                 this.load = true;
                 this.$http.get(url,{
                     headers: {

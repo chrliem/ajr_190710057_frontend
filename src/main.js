@@ -12,8 +12,8 @@ Vue.config.productionTip = false
 Vue.prototype.moment = moment
 
 Vue.prototype.$http = axios;
-Vue.prototype.$api = 'http://127.0.0.1:8000/api'
-Vue.prototype.$baseURL = 'http://127.0.0.1:8000'
+Vue.prototype.$api = 'https://atmajogjarental.christiandsetiawan.xyz/api'
+Vue.prototype.$baseURL = 'https://atmajogjarental.christiandsetiawan.xyz'
 
 new Vue({
   vuetify,
